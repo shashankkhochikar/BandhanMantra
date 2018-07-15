@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_contacts"
+            android:icon="@drawable/ic_contacts"
+            android:title="@string/contacts" />
+        <item
+            android:id="@+id/nav_campaigns"
+            android:icon="@drawable/ic_campagin"
+            android:title="@string/campaigns" />
+        <item
+            android:id="@+id/nav_r_campaigns"
+            android:icon="@drawable/ic_recurring"
+            android:title="@string/r_campaigns" />
+        <item
+            android:id="@+id/nav_coupons"
+            android:icon="@drawable/ic_coupon"
+            android:title="@string/coupons" />
+        <item
+            android:id="@+id/nav_redeem_coupons"
+            android:icon="@drawable/ic_redeem_coupon"
+            android:title="@string/redeem_coupons" />
+        <item
+            android:id="@+id/nav_templates"
+            android:icon="@drawable/ic_templetes"
+            android:title="@string/templates" />
+        <item
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/ic_notifications_active"
+            android:title="@string/notifications" />
+    </group>
+
+    <item android:title="Credit">
+        <menu>
+            <item
+                android:id="@+id/nav_buy_credit"
+                android:icon="@drawable/ic_cc_visa"
+                android:title="@string/buy_credit" />
+        </menu>
+    </item>
+
+</menu>

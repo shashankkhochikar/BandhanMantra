@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bandhan.mantra">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:name=".BandhanMantraApp"
+        android:allowBackup="true"
+        android:icon="@drawable/app_logo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.Login"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.Registration"
+            android:screenOrientation="portrait"
+            android:label="User Registration"/>
+        <activity
+            android:name=".activities.DashboardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ContactGroupsListActivity"
+            android:screenOrientation="portrait"
+            android:label="Group List"/>
+        <activity
+            android:name=".activities.ContactListActivity"
+            android:screenOrientation="portrait"
+            android:label="Contact List"/>
+        <activity
+            android:name=".activities.CreateContactActivity"
+            android:screenOrientation="portrait"
+            android:label="Create Contact"/>
+
+        <activity android:name=".activities.CampaignsListActivity"
+            android:screenOrientation="portrait"
+            android:label="Campaigns"/>
+
+        <activity android:name=".activities.CreateCampaignActivity"
+            android:screenOrientation="portrait"
+            android:label="Create Campaign"/>
+
+        <activity android:name=".activities.RecurringCampaignListActivity"
+            android:screenOrientation="portrait"
+            android:label="Recurring Campaigns"/>
+
+        <activity android:name=".activities.CreateRecurringCampaignActivity"
+            android:screenOrientation="portrait"
+            android:label="Create Recurring Campaign"/>
+
+        <activity android:name=".activities.CouponCampaignsListActivity"
+            android:screenOrientation="portrait"
+            android:label="Coupon Campaigns"/>
+
+        <activity android:name=".activities.CreateCouponCampaignActivity"
+            android:screenOrientation="portrait"
+            android:label="Create Coupon Campaign"/>
+
+        <activity android:name=".activities.TemplatesListActivity"
+            android:screenOrientation="portrait"
+            android:label="Templates"/>
+
+        <activity android:name=".activities.RedeemCouponsActivity"
+            android:screenOrientation="portrait"
+            android:label="Redeem Coupons"/>
+    </application>
+
+</manifest>

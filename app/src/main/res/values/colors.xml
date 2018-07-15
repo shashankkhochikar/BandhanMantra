@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#1ab394</color>
+
+    <color name="ColorTabBg">#E8E8E8</color>
+    <color name="ColorsWhiteSnow">#f2f2f2</color>
+    <color name="ColorsWhite">#ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="ColorsBlack">#000000</color>
+    <color name="ColorsGreen">#00b200</color>
+    <color name="ColorsBlue">#0000cc</color>
+    <color name="ColorRed">#e50000</color>
+    <color name="ColorRedLight">#FFB4B4</color>
+    <color name="ColorsBlack80">#80000000</color>
+    <color name="colorLightBlue">#00C5FF</color>
+    <color name="ColorLightGrey">#949494</color>
+    <color name="ColorBlackTransparent">#80000000</color>
+    <color name="ColorBlackTransparent60">#60000000</color>
+    <color name="ColorBlackTransparent40">#40000000</color>
+    <color name="colorActionBar">#f5f5f5</color>
+    <color name="colorWhiteSmoke">#F8F8F8</color>
+    <color name="ColorErrorRed">#A10D09</color>
+    <color name="ColorOrangeTxt">#FF6400</color>
+    <color name="ColorPlaceHolder">#dcdcdc</color>
+    <color name="ColorGreyTxt">#73717B</color>
+
+    <color name="ColorHintText">#CCCCCC</color>
+    <color name="TransparentColor">#00FFFFFF</color>
+    <color name="SubTextColor">#999999</color>
+    <color name="MainTextColor">#666666</color>
+    <color name="appColor">#FF6600</color>
+    <color name="colorDarkBlue">#0c59b6</color>
+    <color name="ColorLogo">#D200FF</color>
+</resources>

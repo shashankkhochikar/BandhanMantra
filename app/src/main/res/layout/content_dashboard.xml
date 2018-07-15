@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.bandhan.mantra.activities.DashboardActivity"
+    tools:showIn="@layout/app_bar_dashboard">
+
+
+   <LinearLayout
+       android:layout_height="120dp"
+       android:layout_width="match_parent"
+       android:orientation="horizontal">
+       <LinearLayout
+           android:layout_height="match_parent"
+           android:layout_width="match_parent"
+           android:layout_weight="1"
+           android:orientation="vertical"
+           android:background="#1c84c6"
+           android:layout_margin="@dimen/app_min_margin">
+           <LinearLayout android:layout_height="match_parent"
+               android:layout_width="match_parent"
+               android:layout_weight="2">
+               <TextView
+                   android:layout_height="wrap_content"
+                   android:layout_width="match_parent"
+                   android:text="SMS Balance"
+                   android:textColor="@color/white"
+                   android:textStyle="bold"
+                   android:textAlignment="center"
+                   android:layout_gravity="center"/>
+           </LinearLayout>
+           <LinearLayout android:layout_height="match_parent"
+               android:layout_width="match_parent"
+               android:layout_weight="1"
+               android:background="@color/white"
+               android:layout_margin="1dp">
+               <TextView
+                   android:layout_height="wrap_content"
+                   android:layout_width="match_parent"
+                   android:text="0"
+                   android:textColor="@color/ColorsBlack"
+                   android:textStyle="normal"
+                   android:textAlignment="center"
+                   android:layout_gravity="center"
+                   android:textSize="28dp"/>
+           </LinearLayout>
+       </LinearLayout>
+
+       <LinearLayout
+           android:layout_height="match_parent"
+           android:layout_width="match_parent"
+           android:layout_weight="1"
+           android:orientation="vertical"
+           android:background="#23c6c8"
+           android:layout_margin="@dimen/app_min_margin">
+           <LinearLayout android:layout_height="match_parent"
+               android:layout_width="match_parent"
+               android:layout_weight="2">
+               <TextView
+                   android:layout_height="wrap_content"
+                   android:layout_width="match_parent"
+                   android:text="Pending Campaigns"
+                   android:textColor="@color/white"
+                   android:textStyle="bold"
+                   android:textAlignment="center"
+                   android:layout_gravity="center"/>
+           </LinearLayout>
+           <LinearLayout android:layout_height="match_parent"
+               android:layout_width="match_parent"
+               android:layout_weight="1"
+               android:background="@color/white"
+               android:layout_margin="1dp">
+               <TextView
+                   android:layout_height="wrap_content"
+                   android:layout_width="match_parent"
+                   android:text="0"
+                   android:textColor="@color/ColorsBlack"
+                   android:textStyle="normal"
+                   android:textAlignment="center"
+                   android:layout_gravity="center"
+                   android:textSize="28dp"/>
+           </LinearLayout>
+       </LinearLayout>
+   </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="120dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="#23c6c8 "
+            android:layout_margin="@dimen/app_min_margin">
+            <LinearLayout android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="2">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Pending Coupons"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <LinearLayout android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:layout_margin="1dp">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="0"
+                    android:textColor="@color/ColorsBlack"
+                    android:textStyle="normal"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:textSize="28dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="#ed5565"
+            android:layout_margin="@dimen/app_min_margin">
+            <LinearLayout android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="2">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Pending SMS"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <LinearLayout android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:layout_margin="1dp">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="0"
+                    android:textColor="@color/ColorsBlack"
+                    android:textStyle="normal"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:textSize="28dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="120dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="#ed5565 "
+            android:layout_margin="@dimen/app_min_margin">
+            <LinearLayout android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="2">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Reward Points"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <LinearLayout android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:layout_margin="1dp">
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="0"
+                    android:textColor="@color/ColorsBlack"
+                    android:textStyle="normal"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:textSize="28dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="#1c84c6"
+            android:layout_margin="@dimen/app_min_margin">
+            <LinearLayout android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="2">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Discount Amount"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <LinearLayout android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:layout_margin="1dp">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="0"
+                    android:textColor="@color/ColorsBlack"
+                    android:textStyle="normal"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:textSize="28dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="Total messages sent"
+        android:textStyle="bold"
+        android:textAlignment="center"/>
+
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:collapseColumns="*"
+        android:stretchColumns="*"
+        android:layout_marginTop="@dimen/app_normal_margin"> <!-- collapse the first column of the table row-->
+
+
+        <!-- first row of the table layout-->
+        <TableRow
+            android:id="@+id/simpleTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="5">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_weight="1"
+                    android:text="Month"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_margin="@dimen/app_min_margin"/>
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_weight="1"
+                    android:text="SMS"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_margin="@dimen/app_min_margin"/>
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="Coupon"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_marginTop="@dimen/app_min_margin"/>
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="Sales"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_margin="@dimen/app_min_margin"/>
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:text="Reward"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_margin="@dimen/app_min_margin"/>
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

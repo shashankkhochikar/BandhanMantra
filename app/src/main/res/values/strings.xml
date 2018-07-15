@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Bandhan Mantra</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="createaccount">Create an account !</string>
+    <string name="forgotpassword">Forgot password ?</string>
+    <string name="regietration">Registration</string>
+    <string name="futura_book_bt_ttf">FuturaBookBT.ttf</string>
+
+    <string name="firstname">Firstname</string>
+    <string name="lastname">Lastname</string>
+    <string name="mobile">Mobile</string>
+    <string name="company">Company</string>
+    <string name="address">Address</string>
+    <string name="register">Register</string>
+    <string name="getotp">Get OTP</string>
+
+    <string name="contacts">Contacts</string>
+    <string name="campaigns">Campaigns</string>
+    <string name="r_campaigns">Recurring Campaigns</string>
+    <string name="coupons">Coupons</string>
+    <string name="redeem_coupons">Redeem Coupons</string>
+    <string name="templates">Templates</string>
+    <string name="notifications">Notifications</string>
+    <string name="buy_credit">Buy Credits</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="title_activity_dashboard">Dashboard</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+</resources>
