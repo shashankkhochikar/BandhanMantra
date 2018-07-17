@@ -77,7 +77,7 @@ public class Registration extends BaseActivity {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mEdtPwd.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(mEdtFirstName.getWindowToken(), 0);
 
                 if (validate()) {
                     String firstName = mEdtFirstName.getText().toString().trim();
@@ -158,15 +158,20 @@ public class Registration extends BaseActivity {
     }
 
     private void registerUser(String firstName, String lastName, String mobile, String email, String pwd, String company, String address, String otp) {
+
+        Map<String, String> UserDTOMap = new HashMap<String, String>();
+        UserDTOMap.put("Company", company);
+        UserDTOMap.put("FirstName", firstName);
+        UserDTOMap.put("LastName", lastName);
+        UserDTOMap.put("Email", email);
+        UserDTOMap.put("Address", address);
+        UserDTOMap.put("Mobile", mobile);
+        UserDTOMap.put("pwd", pwd);
+        UserDTOMap.put("otp", otp);
+
         Map<String, String> requestMap = new HashMap<String, String>();
-        requestMap.put("Company", company);
-        requestMap.put("FirstName", firstName);
-        requestMap.put("LastName", lastName);
-        requestMap.put("Email", email);
-        requestMap.put("Address", address);
-        requestMap.put("Mobile", mobile);
-        requestMap.put("pwd", pwd);
-        requestMap.put("otp", otp);
+        requestMap.put("accessId", "1");
+        requestMap.put("UserDTO", String.valueOf(UserDTOMap));
 
         try {
             showBusyProgress();
@@ -175,13 +180,13 @@ public class Registration extends BaseActivity {
                     new JSONObject(requestMap), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.v(Registration.class.getName(), "Res :"+response.toString());
+                    Log.v(Registration.class.getName(), "onResponse :"+response.toString());
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     hideBusyProgress();
-                    Log.v(Registration.class.getName(), VolleySingleton.getErrorMessage(error).toString());
+                    Log.v(Registration.class.getName(), "onErrorResponse"+VolleySingleton.getErrorMessage(error).toString());
                 }
             }) {
                 @Override
@@ -195,7 +200,7 @@ public class Registration extends BaseActivity {
             VolleySingleton.getInstance().addToRequestQueue(userRegistrationRequest);
         } catch (Exception e) {
             hideBusyProgress();
-            Log.v(Registration.class.getName(), e.getMessage().toString());
+            Log.v(Registration.class.getName(), "Exception"+e.getMessage().toString());
         }
     }
 }
