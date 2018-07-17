@@ -1,6 +1,8 @@
 package com.bandhan.mantra.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,12 +26,22 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        assignViews();
+
+
+
+    }
+
+    private void assignViews() {
         mEdtEmail = (EditText) findViewById(R.id.edtEmail);
         mEdtPwd = (EditText) findViewById(R.id.edtPwd);
         mBtnLogin = (Button) findViewById(R.id.btnLogin);
         textViewForgotPassword = (TextView) findViewById(R.id.TextViewForgotPassword);
         textViewNewaccount = (TextView) findViewById(R.id.TextViewNewaccount);
+        setListners();
+    }
 
+    private void setListners(){
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +60,46 @@ public class Login extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void getEmailDialoug()
+    {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Login.this);
+        alertDialog.setTitle("RESET PASSWORD");
+        alertDialog.setMessage("Enter Email");
+
+        final EditText input = new EditText(Login.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+
+        alertDialog.setIcon(R.drawable.app_logo);
+        alertDialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String email = input.getText().toString();
+                        if (email.compareTo("") == 0) {
+
+                        }else {
+                            resetPassword(email);
+                        }
+                    }
+                });
+
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
+    }
+
+    private void resetPassword(String email) {
+
     }
 
     private void signin() {

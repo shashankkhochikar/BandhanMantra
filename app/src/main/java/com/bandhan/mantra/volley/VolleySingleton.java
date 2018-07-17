@@ -137,9 +137,7 @@ public class VolleySingleton {
 
     private VolleySingleton(Context context) {
         mContext = context;
-        //wsBaseUrl = "http://vizippdraw.smartwebi.com/";
-        wsBaseUrl = "http://vizippindia.smartwebi.com/";
-        edbrixServerUrl = "http://enterpriseservices.edbrix.net/app/";
+        wsBaseUrl = "http://35.231.207.193/msgAPI/api/";
         mRequestQueue = getRequestQueue();
         mImageLoader = new ImageLoader(mRequestQueue,
                 new ImageLoader.ImageCache() {
