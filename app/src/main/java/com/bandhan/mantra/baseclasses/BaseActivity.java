@@ -46,8 +46,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -81,6 +84,8 @@ public class BaseActivity extends AppCompatActivity {
     private final static String OPR_VERSION = "version";
     private final static String OPR_TS = "ts";
     private final static String OPR_ALBUM = "album";
+
+    public final static String accessId = "1";
 
 
     @Override
@@ -309,5 +314,21 @@ public class BaseActivity extends AppCompatActivity {
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         finish();
+    }
+
+    public String createStringQueryBuilder(String url, Map<String, String> params)
+    {
+        if (url == null || params == null || params.isEmpty())
+        {    return url;    }
+        Uri.Builder builder = Uri.parse(url).buildUpon();
+
+        Set<String> keys = params.keySet();
+        Iterator<String> iterator = keys.iterator();
+        while (iterator.hasNext())
+        {
+            String key = iterator.next();
+            builder.appendQueryParameter(key, params.get(key));
+        }
+        return builder.build().toString();
     }
 }

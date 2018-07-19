@@ -134,7 +134,10 @@ public class Login extends BaseActivity {
     private void resetPassword(final String email) {
         try {
             showBusyProgress();
-            StringRequest userResetPasswordRequest = new StringRequest(Request.Method.GET, VolleySingleton.getWsBaseUrl() + "User/ForgotPassword?Email="+email, new Response.Listener<String>() {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("Email",email);
+            String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "User/ForgotPassword",params);
+            StringRequest userResetPasswordRequest = new StringRequest(Request.Method.GET, urlWithParams, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String Response) {
                     hideBusyProgress();
@@ -157,14 +160,7 @@ public class Login extends BaseActivity {
                     Log.v(Login.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
                     //showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
                 }
-            }) /*{
-                @Override
-                public Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("Email", email);
-                    return params;
-                }
-            }*/;
+            });
             VolleySingleton.getInstance().addToRequestQueue(userResetPasswordRequest);
         } catch (Exception e) {
             hideBusyProgress();
@@ -245,7 +241,7 @@ public class Login extends BaseActivity {
                 @Override
                 public Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
-                    params.put("accessId", "1");
+                    params.put("accessId", accessId);
                     params.put("Email", username);
                     params.put("Password", password);
                     return params;

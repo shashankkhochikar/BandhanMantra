@@ -8,7 +8,7 @@
 
 
         <TextView
-            android:id="@+id/org_name"
+            android:id="@+id/textViewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -19,16 +19,16 @@
             android:text="Group Name"
             android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/org_image"
+        <TextView
+            android:id="@+id/textViewCount"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_margin="@dimen/app_min_margin"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/app_logo"
-            android:layout_weight="7"/>
+            android:text="0"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_weight="7"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
 
 </LinearLayout>
 

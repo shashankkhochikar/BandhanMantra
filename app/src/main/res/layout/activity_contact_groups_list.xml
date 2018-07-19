@@ -24,8 +24,8 @@
             app:fontFamily="@font/dancing_script_ot"
             tools:ignore="MissingPrefix" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/gropuListRecyclerView"
+        <ListView
+            android:id="@+id/gropuListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/contact_gropus_list_recycleitem" />
