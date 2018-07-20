@@ -4,31 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="@dimen/app_normal_padding">
+    android:padding="@dimen/app_min_padding"
+    android:layout_weight="9">
 
 
         <TextView
             android:id="@+id/textViewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="@dimen/app_normal_margin"
-            android:gravity="center_vertical"
-            android:textSize="18sp"
-            android:typeface="monospace"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:text="Group Name"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:layout_margin="@dimen/app_min_margin"/>
 
         <TextView
             android:id="@+id/textViewCount"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
             android:text="0"
-            android:gravity="center"
             android:textStyle="bold"
-            android:layout_weight="7"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+            android:textAlignment="center"
+            android:layout_weight="4"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_margin="@dimen/app_min_margin"/>
+
+        <ImageView
+            android:id="@+id/img_delgrp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:src="@drawable/ic_delete"
+            android:layout_weight="4"
+            android:layout_margin="@dimen/app_min_margin"/>
+
+
 
 </LinearLayout>
 

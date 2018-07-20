@@ -41,6 +41,8 @@ public class ContactGroupsListActivity extends BaseActivity {
     private ListView gropuListListView;
     private SessionManager sessionManager;
     public UserData userData;
+    private ContactGropusListAdapter contactGropusListAdapter;
+    private ContactGropusListAdapter.OnButtonActionListener onButtonActionListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +56,25 @@ public class ContactGroupsListActivity extends BaseActivity {
         addGroupFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ContactGroupsListActivity.this,ContactListActivity.class));
+
             }
         });
         sessionManager = new SessionManager(this);
         userData = sessionManager.getLoggedUserData();
-        Integer clientId = userData.getId();
+        final Integer clientId = userData.getId();
+
         getGroupListByClientId(clientId);
+        onButtonActionListener = new ContactGropusListAdapter.OnButtonActionListener() {
+            @Override
+            public void onDeleteButtonPressed(ContactGroupItemData contactGroupItemData, int position) {
+                deleteGroupById(contactGroupItemData.getId(),position);
+            }
+
+            @Override
+            public void onViewClicked(ContactGroupItemData contactGroupItemData, int position) {
+                showGroupContactsByClientID(clientId,position);
+            }
+        };
     }
 
     private void getGroupListByClientId(Integer clientId) {
@@ -78,18 +92,18 @@ public class ContactGroupsListActivity extends BaseActivity {
                     if (!Response.equals("")) {
 
                         List<ContactGroupItemData> groupList = new ArrayList<ContactGroupItemData>();
+                        JSONArray jsonArray = null;
                         try {
-                            ObjectMapper mapper = new ObjectMapper();
-                            ContactGroupItem clientes= new Gson().fromJson(Response, ContactGroupItem.class);
-                            groupList.addAll(clientes.getContactGroupItemData());
-                        } catch (Exception e) {
+                            jsonArray = new JSONArray(Response);
+                            Log.e(ContactGroupsListActivity.class.getName(),""+jsonArray.get(0).toString());
+                            for(int i=0;i<jsonArray.length();i++){
+                                ContactGroupItemData tmptestData = new Gson().fromJson(jsonArray.get(i).toString(),ContactGroupItemData.class);
+                                groupList.add(tmptestData);
+                            }
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-                        //ContactGroupItem contactGroupItem  = new Gson().fromJson(Response, ContactGroupItem.class);
-                        //groupList.addAll(contactGroupItem.getContactGroupItemData());
-
-                        ContactGropusListAdapter contactGropusListAdapter = new ContactGropusListAdapter(ContactGroupsListActivity.this, groupList);
+                        contactGropusListAdapter = new ContactGropusListAdapter(ContactGroupsListActivity.this, groupList,onButtonActionListener);
                         gropuListListView.setAdapter(contactGropusListAdapter);
 
                     } else {
@@ -113,6 +127,56 @@ public class ContactGroupsListActivity extends BaseActivity {
         }
 
     }
+
+    private void deleteGroupById(final Integer grpId, final int position){
+        try {
+            showBusyProgress();
+            StringRequest deleteGroupRequest = new StringRequest(Request.Method.POST, VolleySingleton.getWsBaseUrl() + "Group/RemoveGroup", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String Response) {
+                    hideBusyProgress();
+                    Log.v(ContactGroupsListActivity.class.getName(), "onResponse :" + Response.toString());
+                    if (!Response.equals("")) {
+                        if (Response.equals("true")) {
+                            contactGropusListAdapter.removeItem(position);
+                            showToast("Group Deleted Successfully !!!");
+                        } else if (Response.equals("false")){
+                            showToast("Invalid Group");
+                        }
+                    } else {
+                        showToast("Invalid Response");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError e) {
+                    e.printStackTrace();
+                    hideBusyProgress();
+                    Log.v(ContactGroupsListActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
+                    //showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
+                }
+            }) {
+                @Override
+                public Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("ID", ""+grpId);
+                    return params;
+                }
+            };
+            VolleySingleton.getInstance().addToRequestQueue(deleteGroupRequest);
+        } catch (Exception e) {
+            hideBusyProgress();
+            Log.v(ContactGroupsListActivity.class.getName(), "Exception" + e.getMessage().toString());
+            showToast("Exception " + e.getMessage().toString());
+        }
+    }
+
+    private void showGroupContactsByClientID(Integer clientId, int position){
+        Intent ContactListActivity = new Intent(ContactGroupsListActivity.this, ContactListActivity.class);
+        ContactListActivity.putExtra("clientId", clientId);
+        startActivity(ContactListActivity);
+    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
