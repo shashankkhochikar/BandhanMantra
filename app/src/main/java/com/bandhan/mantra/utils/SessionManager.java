@@ -5,6 +5,10 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
+import com.bandhan.mantra.model.UserData;
+
+import java.io.IOException;
+
 /**
  * Wrapper for managing session data.
  *
@@ -66,9 +70,19 @@ public class SessionManager {
      *
      * @return
      */
-  /*  public Boolean hasSessionCredentials() {
-        return ((this.getSessionOrgId().length() > 0) && (this.getSessionProfileToken().length() > 0) && (this.getLoggedUserData() != null) && (this.getLoggedUserData().getId().length() > 0));
-    }*/
+    public Boolean hasSessionCredentials() {
+        //return ((this.getSessionOrgId().length() > 0) && (this.getSessionProfileToken().length() > 0) && (this.getLoggedUserData() != null) && (this.getLoggedUserData().getId().length() > 0));
+        if (this.getLoggedUserData() != null) {
+            if (this.getLoggedUserData().getId() != null && this.getLoggedUserData().getId() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        //return ((this.getLoggedUserData() != null) && (this.getLoggedUserData().getId() > 0));
+    }
 
     /**
      * Gets the session's saved username.
@@ -149,7 +163,7 @@ public class SessionManager {
         return this.sharedPrefs.getString(PREFS_SESSION_ORG_ID, "");
     }
 
-   /* public UserData getLoggedUserData() {
+    public UserData getLoggedUserData() {
         try {
             return (UserData) ObjectSerializer.deserialize(this.sharedPrefs.getString(PREFS_SESSION_LOGGED_USERDATA, ObjectSerializer.serialize(new UserData())));
         } catch (IOException e) {
@@ -159,7 +173,7 @@ public class SessionManager {
             e.printStackTrace();
             return null;
         }
-    }*/
+    }
 
     /**
      * Gets the session's user profile image base64.
@@ -369,7 +383,7 @@ public class SessionManager {
         editor.commit();
     }
 
-   /* public void updateLoggedUserData(UserData loggedUserData) {
+    public void updateLoggedUserData(UserData loggedUserData) {
         Editor editor = this.sharedPrefs.edit();
         try {
             if ((loggedUserData != null)) {
@@ -384,7 +398,7 @@ public class SessionManager {
     }
 
 
-    public void updateLoggedUserList(ArrayList<UserData> loggedUserList) {
+    /*public void updateLoggedUserList(ArrayList<UserData> loggedUserList) {
         Editor editor = this.sharedPrefs.edit();
         try {
             if ((loggedUserList != null) && (loggedUserList.size() > 0)) {

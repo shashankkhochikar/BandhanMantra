@@ -41,7 +41,8 @@
                 android:padding="@dimen/app_normal_padding"
                 android:textColor="@color/SubTextColor"
                 android:textColorHint="@color/ColorPlaceHolder"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:text="client@gmail.com" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -69,7 +70,8 @@
                 android:padding="@dimen/app_normal_padding"
                 android:textColor="@color/SubTextColor"
                 android:textColorHint="@color/ColorPlaceHolder"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:text="admin123" />
         </android.support.design.widget.TextInputLayout>
 
 
@@ -113,6 +115,7 @@
         android:fontFamily="@string/futura_book_bt_ttf"
         android:text="@string/createaccount"
         android:textAlignment="center"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        android:visibility="gone"/>
 
 </RelativeLayout>
