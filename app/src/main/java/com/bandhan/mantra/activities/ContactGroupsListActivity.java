@@ -72,7 +72,7 @@ public class ContactGroupsListActivity extends BaseActivity {
 
             @Override
             public void onViewClicked(ContactGroupItemData contactGroupItemData, int position) {
-                showGroupContactsByClientID(clientId,position);
+                showGroupContactsByClientID(clientId,contactGroupItemData.getId());
             }
         };
     }
@@ -171,9 +171,10 @@ public class ContactGroupsListActivity extends BaseActivity {
         }
     }
 
-    private void showGroupContactsByClientID(Integer clientId, int position){
+    private void showGroupContactsByClientID(int clientId, int grpId){
         Intent ContactListActivity = new Intent(ContactGroupsListActivity.this, ContactListActivity.class);
         ContactListActivity.putExtra("clientId", clientId);
+        ContactListActivity.putExtra("groupId", grpId);
         startActivity(ContactListActivity);
     }
 

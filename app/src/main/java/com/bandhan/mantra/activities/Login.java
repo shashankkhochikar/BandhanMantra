@@ -135,9 +135,11 @@ public class Login extends BaseActivity {
     private void resetPassword(final String email) {
         try {
             showBusyProgress();
+
             Map<String, String> params = new HashMap<String, String>();
             params.put("Email",email);
             String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "User/ForgotPassword",params);
+
             StringRequest userResetPasswordRequest = new StringRequest(Request.Method.GET, urlWithParams, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String Response) {
