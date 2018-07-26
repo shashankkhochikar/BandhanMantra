@@ -53,12 +53,12 @@ public class ContactGroupsListActivity extends BaseActivity {
         addGroupFab = (FloatingActionButton) findViewById(R.id.addGroupFab);
         gropuListListView = (ListView) findViewById(R.id.gropuListView);
 
-        addGroupFab.setOnClickListener(new View.OnClickListener() {
+       /* addGroupFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
-        });
+        });*/
         sessionManager = new SessionManager(this);
         userData = sessionManager.getLoggedUserData();
         final Integer clientId = userData.getId();

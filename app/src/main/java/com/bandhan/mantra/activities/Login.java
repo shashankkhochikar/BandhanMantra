@@ -57,6 +57,7 @@ public class Login extends BaseActivity {
             String password = sessionManager.getSessionPassword();
             signin(username,password);
         }
+
     }
 
     private void assignViews() {
