@@ -11,34 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/app_min_margin"
-            android:layout_marginLeft="@dimen/app_min_margin"
-            android:layout_marginRight="@dimen/app_min_margin"
-            android:layout_marginTop="@dimen/app_min_margin"
-            android:fontFamily="@font/dancing_script_ot"
-            android:text="Group List"
-            android:textSize="30dp"
-            app:fontFamily="@font/dancing_script_ot"
-            tools:ignore="MissingPrefix" />
-
         <ListView
             android:id="@+id/gropuListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/contact_gropus_list_recycleitem" />
     </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addGroupFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
-
-
 </android.support.design.widget.CoordinatorLayout>

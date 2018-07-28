@@ -1,17 +1,26 @@
 package com.bandhan.mantra.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.bandhan.mantra.R;
 import com.bandhan.mantra.adapter.ContactGropusListAdapter;
@@ -26,10 +35,12 @@ import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,34 +48,31 @@ import java.util.Map;
 
 public class ContactGroupsListActivity extends BaseActivity {
 
-    private FloatingActionButton addGroupFab;
     private ListView gropuListListView;
     private SessionManager sessionManager;
     public UserData userData;
     private ContactGropusListAdapter contactGropusListAdapter;
     private ContactGropusListAdapter.OnButtonActionListener onButtonActionListener;
+    public int clientId = 0;
+    public List<ContactGroupItemData> groupList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_groups_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        addGroupFab = (FloatingActionButton) findViewById(R.id.addGroupFab);
         gropuListListView = (ListView) findViewById(R.id.gropuListView);
-
-       /* addGroupFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
         sessionManager = new SessionManager(this);
         userData = sessionManager.getLoggedUserData();
-        final Integer clientId = userData.getId();
+        clientId = userData.getId();
 
         getGroupListByClientId(clientId);
         onButtonActionListener = new ContactGropusListAdapter.OnButtonActionListener() {
+            @Override
+            public void onEditButtonPressed(ContactGroupItemData contactGroupItemData, int position) {
+                showEditGroupNameDialouge(contactGroupItemData);
+            }
+
             @Override
             public void onDeleteButtonPressed(ContactGroupItemData contactGroupItemData, int position) {
                 deleteGroupById(contactGroupItemData.getId(),position);
@@ -91,7 +99,7 @@ public class ContactGroupsListActivity extends BaseActivity {
                     Log.v(ContactListActivity.class.getName(), "onResponse :" + Response.toString());
                     if (!Response.equals("")) {
 
-                        List<ContactGroupItemData> groupList = new ArrayList<ContactGroupItemData>();
+                        groupList = new ArrayList<ContactGroupItemData>();
                         JSONArray jsonArray = null;
                         try {
                             jsonArray = new JSONArray(Response);
@@ -125,7 +133,6 @@ public class ContactGroupsListActivity extends BaseActivity {
             Log.v(ContactListActivity.class.getName(), "Exception" + e.getMessage().toString());
             showToast("Exception " + e.getMessage().toString());
         }
-
     }
 
     private void deleteGroupById(final Integer grpId, final int position){
@@ -178,10 +185,208 @@ public class ContactGroupsListActivity extends BaseActivity {
         startActivity(ContactListActivity);
     }
 
+    private void createNewGroup(final int clientId,final String groupName) {
+        try {
+            showBusyProgress();
+            JSONObject params = new JSONObject();
+            params.put("Id", "0");
+            params.put("Name", groupName);
+            params.put("ClientID", ""+clientId);
+            params.put("ContactCount", "0");
+            params.put("Contacts", "");
+            final String requestBody = params.toString();
+
+            StringRequest createGroupRequest = new StringRequest(Request.Method.POST, VolleySingleton.getWsBaseUrl() + "Group/CreateGroup", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String Response) {
+                    hideBusyProgress();
+                    Log.v(ContactGroupsListActivity.class.getName(), "onResponse :" + Response.toString());
+                    if (!Response.equals("")) {
+                        getGroupListByClientId(clientId);
+                        showToast("Ok");
+                    } else {
+                        showToast("Invalid Response");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError e) {
+                    e.printStackTrace();
+                    hideBusyProgress();
+                    Log.v(ContactGroupsListActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
+                    showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            VolleySingleton.getInstance().addToRequestQueue(createGroupRequest);
+        } catch (Exception e) {
+            hideBusyProgress();
+            Log.v(ContactGroupsListActivity.class.getName(), "Exception" + e.getMessage().toString());
+            showToast("Exception " + e.getMessage().toString());
+        }
+    }
+
+    private void getGroupNameDialouge() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(ContactGroupsListActivity.this);
+        alertDialog.setTitle("New Group");
+        alertDialog.setMessage("Enter Name");
+
+        final EditText input = new EditText(ContactGroupsListActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        lp.setMargins(10,0,10,0);
+        input.setLayoutParams(lp);
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        alertDialog.setView(input);
+
+        alertDialog.setIcon(R.drawable.app_logo);
+        alertDialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String name = input.getText().toString();
+                        if(!name.equals("")){
+                            createNewGroup(clientId,name);
+                        }
+                    }
+                });
+
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
+    }
+/*************************************************************************************/
+    private void editGroup(final int clientId,final String groupName,final int groupId) {
+        try {
+            showBusyProgress();
+            JSONObject params = new JSONObject();
+            params.put("Id",""+groupId);
+            params.put("Name", groupName);
+            params.put("ClientID", ""+clientId);
+            params.put("ContactCount", "0");
+            params.put("Contacts", "");
+            final String requestBody = params.toString();
+
+            StringRequest editGroupRequest = new StringRequest(Request.Method.POST, VolleySingleton.getWsBaseUrl() + "Group/EditGroup", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String Response) {
+                    hideBusyProgress();
+                    Log.v(ContactGroupsListActivity.class.getName(), "onResponse :" + Response.toString());
+                    if (!Response.equals("An error occurred, please try again or contact the administrator.")) {
+                        getGroupListByClientId(clientId);
+                        showToast("Ok");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError e) {
+                    e.printStackTrace();
+                    hideBusyProgress();
+                    Log.v(ContactGroupsListActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
+                    showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            VolleySingleton.getInstance().addToRequestQueue(editGroupRequest);
+        } catch (Exception e) {
+            hideBusyProgress();
+            Log.v(ContactGroupsListActivity.class.getName(), "Exception" + e.getMessage().toString());
+            showToast("Exception " + e.getMessage().toString());
+        }
+    }
+
+    private void showEditGroupNameDialouge(final ContactGroupItemData contactGroupItemData) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(ContactGroupsListActivity.this);
+        alertDialog.setTitle("Edit Group");
+        alertDialog.setMessage("Enter New Name");
+
+        final EditText input = new EditText(ContactGroupsListActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        lp.setMargins(10,0,10,0);
+        input.setLayoutParams(lp);
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        input.setText(contactGroupItemData.getName().toString());
+        alertDialog.setView(input);
+
+        alertDialog.setIcon(R.drawable.app_logo);
+        alertDialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String name = input.getText().toString();
+                        if(!name.equals("")){
+                            editGroup(clientId,name,contactGroupItemData.getId());
+                        }
+                    }
+                });
+
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.add_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_new:
+                getGroupNameDialouge();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 }
