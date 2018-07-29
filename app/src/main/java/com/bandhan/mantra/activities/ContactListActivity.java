@@ -1,20 +1,25 @@
 package com.bandhan.mantra.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
 import com.bandhan.mantra.R;
 import com.bandhan.mantra.adapter.ContactListAdapter;
 import com.bandhan.mantra.baseclasses.BaseActivity;
+import com.bandhan.mantra.model.ContactGroupItemData;
 import com.bandhan.mantra.model.Datum;
 import com.bandhan.mantra.model.GroupContactsByClientIdData;
 import com.bandhan.mantra.volley.GsonRequest;
@@ -32,6 +37,7 @@ public class ContactListActivity extends BaseActivity {
     private Integer clientId, groupId;
     private ContactListAdapter contactListAdapter;
     private ContactListAdapter.OnButtonActionListener onButtonActionListener;
+    private ContactGroupItemData contactGroupItemData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class ContactListActivity extends BaseActivity {
         contactListListView = (ListView) findViewById(R.id.ConactListRecyclerView);
         Bundle extras = getIntent().getExtras();
         clientId = extras.getInt("clientId");
+        contactGroupItemData = (ContactGroupItemData) getIntent().getSerializableExtra("groupData");
         groupId = extras.getInt("groupId");
         getGroupContactsByClientID(clientId, groupId);
 
@@ -52,14 +59,80 @@ public class ContactListActivity extends BaseActivity {
 
             @Override
             public void onDeleteButtonPressed(Datum datum, int position) {
-
+                deleteSingleContact(datum,position);
             }
 
             @Override
             public void onViewClicked(Datum datum, int position) {
+                Intent editContactintent = new Intent(ContactListActivity.this,CreateContactActivity.class);
+                editContactintent.putExtra("contactData",datum);
+                editContactintent.putExtra("clientId",clientId);
+                editContactintent.putExtra("groupData", contactGroupItemData);
+                editContactintent.putExtra("isEdit",true);
+                startActivity(editContactintent);
 
             }
         };
+    }
+
+    private void deleteSingleContact(Datum datum, final int position) {
+        try {
+            showBusyProgress();
+            /*JSONObject params = new JSONObject();
+            //params.put("id",""+datum.getId());
+            final String requestBody = params.toString();*/
+
+            Map<String, String> param = new HashMap<String, String>();
+            param.put("id",""+datum.getId());
+            String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Contact/RemoveContact",param);
+
+            StringRequest removeContactRequest = new StringRequest(Request.Method.POST, urlWithParams, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String Response) {
+                    hideBusyProgress();
+                    Log.v(ContactListActivity.class.getName(), "onResponse :" + Response.toString());
+                    if (Response.equals("")) {
+                       showToast("Ok");
+                       contactListAdapter.removeItem(position);
+                    } else {
+                        showToast("Invalid Response");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    hideBusyProgress();
+                    //Log.v(ContactListActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(error).toString());
+                    //showToast("onErrorResponse " + VolleySingleton.getErrorMessage(error).toString());
+
+                    NetworkResponse response = error.networkResponse;
+                    if (error instanceof ServerError && response != null) {
+                        try {
+                            String res = new String(response.data,HttpHeaderParser.parseCharset(response.headers, "utf-8"));// Now you can use any deserializer to make sense of data
+                            //JSONObject obj = new JSONObject(res);
+                            Log.v(ContactListActivity.class.getName(), "onErrorResponse 1 \n\n" + res);
+                        } catch (UnsupportedEncodingException e1) { // Couldn't properly decode data to string
+                            e1.printStackTrace();
+                        } catch (Exception e2) {// returned data is not JSONObject?
+                            e2.printStackTrace();
+                        }
+                    }
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+
+            };
+            VolleySingleton.getInstance().addToRequestQueue(removeContactRequest);
+        } catch (Exception e) {
+            hideBusyProgress();
+            Log.v(ContactListActivity.class.getName(), "Exception" + e.getMessage().toString());
+            showToast("Exception " + e.getMessage().toString());
+        }
     }
 
     private void getGroupContactsByClientID(final int clientId, final Integer groupId) {
@@ -133,7 +206,6 @@ public class ContactListActivity extends BaseActivity {
             showToast("Something went wrong. Please try again later.");
         }
     }
-
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -149,7 +221,11 @@ public class ContactListActivity extends BaseActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_new:
-                //getGroupNameDialouge();
+                Intent newContactintent = new Intent(ContactListActivity.this,CreateContactActivity.class);
+                newContactintent.putExtra("clientId",clientId);
+                newContactintent.putExtra("groupData", contactGroupItemData);
+                newContactintent.putExtra("isEdit",false);
+                startActivity(newContactintent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
