@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -72,11 +73,19 @@ public class ContactListAdapter extends BaseAdapter {
                 onButtonActionListener.onViewClicked(datum, position);
             }
         });
-        if (checkBoxContactItem.isChecked()) {
+
+        /*if (checkBoxContactItem.isChecked()) {
             onButtonActionListener.onCheckBoxPressed(datum, position, true);
         } else if (!checkBoxContactItem.isChecked()) {
             onButtonActionListener.onCheckBoxPressed(datum, position, false);
-        }
+        }*/
+        checkBoxContactItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onButtonActionListener.onCheckBoxPressed(datum, position, isChecked);
+            }
+        });
+
         imageViewDelGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

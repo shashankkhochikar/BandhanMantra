@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.android.volley.AuthFailureError;
@@ -28,7 +30,9 @@ import com.bandhan.mantra.volley.VolleySingleton;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ContactListActivity extends BaseActivity {
@@ -38,6 +42,8 @@ public class ContactListActivity extends BaseActivity {
     private ContactListAdapter contactListAdapter;
     private ContactListAdapter.OnButtonActionListener onButtonActionListener;
     private ContactGroupItemData contactGroupItemData;
+    private LinearLayout linearLayoutContactItem;
+    private List<Datum> checkedContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,9 @@ public class ContactListActivity extends BaseActivity {
         setContentView(R.layout.activity_contact_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         contactListListView = (ListView) findViewById(R.id.ConactListRecyclerView);
+        linearLayoutContactItem = (LinearLayout)findViewById(R.id.linearLayoutContactItem);
+        checkedContacts = new ArrayList<Datum>();
+
         Bundle extras = getIntent().getExtras();
         clientId = extras.getInt("clientId");
         contactGroupItemData = (ContactGroupItemData) getIntent().getSerializableExtra("groupData");
@@ -54,6 +63,24 @@ public class ContactListActivity extends BaseActivity {
         onButtonActionListener = new ContactListAdapter.OnButtonActionListener() {
             @Override
             public void onCheckBoxPressed(Datum datum, int position, boolean isChecked) {
+               if(isChecked == false){
+                    checkedContacts.remove(datum);
+                    /*if(checkedContacts.size()<0){
+                        linearLayoutContactItem.setVisibility(View.GONE);
+                    }else {
+                        linearLayoutContactItem.setVisibility(View.VISIBLE);
+                    }*/
+                   showToast("size : "+checkedContacts.size()+"\npos : "+position+"\nisChecked : "+isChecked);
+                }
+                if(isChecked == true){
+                    checkedContacts.add(datum);
+                    /*if(checkedContacts.size()<0){
+                        linearLayoutContactItem.setVisibility(View.GONE);
+                    }else {
+                        linearLayoutContactItem.setVisibility(View.VISIBLE);
+                    }*/
+                    showToast("size : "+checkedContacts.size()+"\npos : "+position+"\nisChecked : "+isChecked);
+                }
 
             }
 
