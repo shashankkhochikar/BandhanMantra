@@ -291,7 +291,7 @@ public class CreateCampaignActivity extends BaseActivity {
         try {
             showBusyProgress();
             Map<String, String> params = new HashMap<String, String>();
-            params.put("accessId","1");
+            params.put("accessId",accessId);
             params.put("ClientId",""+clientId);
             String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Template/GetTemplateListByClientId",params);
             Log.v(CreateCampaignActivity.class.getName(), "Req : "+urlWithParams);
@@ -341,7 +341,7 @@ public class CreateCampaignActivity extends BaseActivity {
         try {
             showBusyProgress();
             Map<String, String> params = new HashMap<String, String>();
-            params.put("accessId","1");
+            params.put("accessId",accessId);
             params.put("ClientId",""+clientId);
             String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Group/GetGroupListByClientIdForCampaign",params);
             Log.v(CreateCampaignActivity.class.getName(), "Req : "+urlWithParams);
@@ -439,34 +439,48 @@ public class CreateCampaignActivity extends BaseActivity {
         try {
             JSONObject values = new JSONObject();
             if(isEdit){
-                values.put("Id",""+campaignsListItem.getId());
-                values.put("Name",""+campaignsListItem.getName());
+                values.put("Id",campaignsListItem.getId());
             }else if(!isEdit){
-                values.put("Id","0");
-                values.put("Name",""+mEtdName.getText());
-            }
+                values.put("Id",0);
 
+            }
+            values.put("Name",""+mEtdName.getText());
+            values.put("RecipientsNumber","");
+            values.put("RecipientsCount",1);
             values.put("Message",""+mEdtCampaignMsg.getText().toString());
 
             Date c = Calendar.getInstance().getTime();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
             String formattedDate = df.format(c);
             values.put("CreatedDate",""+formattedDate);
+
             if(mRadioButtonLater.isChecked()){
-                values.put("IsScheduled","true");
+                values.put("IsScheduled",true);
                 values.put("ScheduledDate",""+mEdtScheduledDate.getText().toString());
                 values.put("ScheduledTime",""+mEdtScheduledTime.getText().toString());
             }else if(mRadioButtonNow.isChecked()){
-                values.put("IsScheduled","false");
+                values.put("IsScheduled",false);
                 values.put("ScheduledDate","");
                 values.put("ScheduledTime","");
             }
-
+            values.put("IPAddress","");
+            values.put("MessageCount",1);
+            values.put("RequiredCredits",1);
+            values.put("Status","Unsend");
             values.put("Remark",""+mEdtCampaignRemark.getText().toString());
-            values.put("ClientId",""+clientId);
-            values.put("LanguageCode",""+selectedLanguageId);
-            values.put("GroupId",""+selectedGroup.get("Id"));
+            values.put("ClientId",clientId);
+            values.put("CreatedBy",clientId);
+            values.put("GroupId",selectedGroup.get("Id"));
             values.put("GroupName",""+selectedGroup.get("Name"));
+            values.put("IsUnicode",false);
+            values.put("LanguageCode",""+selectedLanguageId);
+            values.put("GroupContactCount",1);
+            values.put("ForAllContact",false);
+            values.put("ConsumedCredits",2);
+            values.put("CreditsDiffrence",0);
+            values.put("IsReconcile",false);
+            values.put("ReconcileDate",""+formattedDate);
+            values.put("RecurringCampaignId","");
             values.put("TemplateDTO",selectedTemplate);
 
             return values;

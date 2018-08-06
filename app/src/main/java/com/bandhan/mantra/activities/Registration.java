@@ -170,7 +170,7 @@ public class Registration extends BaseActivity {
         UserDTOMap.put("otp", otp);
 
         Map<String, String> requestMap = new HashMap<String, String>();
-        requestMap.put("accessId", "1");
+        requestMap.put("accessId", accessId);
         requestMap.put("UserDTO", String.valueOf(UserDTOMap));
 
         try {

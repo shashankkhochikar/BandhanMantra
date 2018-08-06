@@ -74,7 +74,9 @@
                             android:lines="3"/>
                     </android.support.design.widget.TextInputLayout>
 
-                    <Button android:layout_height="wrap_content"
+                    <Button
+                        android:id="@+id/btnRedeem"
+                        android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:text="Check"
                         android:background="@drawable/ic_circle"
@@ -127,6 +129,7 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <Button
+                        android:id="@+id/btnResend"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:text="Check"

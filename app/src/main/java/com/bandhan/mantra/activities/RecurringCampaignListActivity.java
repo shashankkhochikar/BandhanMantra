@@ -16,13 +16,6 @@ public class RecurringCampaignListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recurring_campaign_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        addRecurringCampaignsFab = (FloatingActionButton) findViewById(R.id.addRecurringCampaignsFab);
-        addRecurringCampaignsFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(RecurringCampaignListActivity.this,CreateRecurringCampaignActivity.class));
-            }
-        });
     }
     @Override
     public boolean onSupportNavigateUp() {
