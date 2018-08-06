@@ -12,6 +12,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/app_normal_margin"
@@ -108,7 +109,8 @@
                         android:id="@+id/spnExpiresAfter"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:entries="@array/duration_array"/>
 
                 </LinearLayout>
 
@@ -120,7 +122,7 @@
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/edtExpiryDate"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:drawableRight="@drawable/ic_calendar"
                         android:hint="Expiry Date"
                         android:inputType="time" />
@@ -164,10 +166,12 @@
             </RadioGroup>
 
             <LinearLayout
+                android:id="@+id/linearLayoutScheduleDateTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2">
+                android:weightSum="2"
+                android:visibility="gone">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"

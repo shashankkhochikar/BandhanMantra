@@ -22,59 +22,61 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.Registration"
-            android:screenOrientation="portrait"
-            android:label="User Registration"/>
+            android:label="User Registration"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.DashboardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ContactGroupsListActivity"
-            android:screenOrientation="portrait"
-            android:label="Group List"/>
+            android:label="Group List"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ContactListActivity"
-            android:screenOrientation="portrait"
-            android:label="Contact List"/>
+            android:label="Contact List"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.CreateContactActivity"
-            android:screenOrientation="portrait"
-            android:label="Create Contact"/>
-
-        <activity android:name=".activities.CampaignsListActivity"
-            android:screenOrientation="portrait"
-            android:label="Campaigns"/>
-
-        <activity android:name=".activities.CreateCampaignActivity"
-            android:screenOrientation="portrait"
-            android:label="Create Campaign"/>
-
-        <activity android:name=".activities.RecurringCampaignListActivity"
-            android:screenOrientation="portrait"
-            android:label="Recurring Campaigns"/>
-
-        <activity android:name=".activities.CreateRecurringCampaignActivity"
-            android:screenOrientation="portrait"
-            android:label="Create Recurring Campaign"/>
-
-        <activity android:name=".activities.CouponCampaignsListActivity"
-            android:screenOrientation="portrait"
-            android:label="Coupon Campaigns"/>
-
-        <activity android:name=".activities.CreateCouponCampaignActivity"
-            android:screenOrientation="portrait"
-            android:label="Create Coupon Campaign"/>
-
-        <activity android:name=".activities.TemplatesListActivity"
-            android:screenOrientation="portrait"
-            android:label="Templates"/>
-
-        <activity android:name=".activities.RedeemCouponsActivity"
-            android:screenOrientation="portrait"
-            android:label="Redeem Coupons"/>
+            android:label="Create Contact"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CampaignsListActivity"
+            android:label="Campaigns"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CreateCampaignActivity"
+            android:label="Create Campaign"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.RecurringCampaignListActivity"
+            android:label="Recurring Campaigns"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CreateRecurringCampaignActivity"
+            android:label="Create Recurring Campaign"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CouponCampaignsListActivity"
+            android:label="Coupon Campaigns"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CreateCouponCampaignActivity"
+            android:label="Create Coupon Campaign"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.TemplatesListActivity"
+            android:label="Templates"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.RedeemCouponsActivity"
+            android:label="Redeem Coupons"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.NotificationsActivity"
+            android:label="Notifications"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

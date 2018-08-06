@@ -231,6 +231,7 @@ public class DashboardActivity extends BaseActivity implements NavigationView.On
         } else if (id == R.id.nav_templates) {
             startActivity(new Intent(DashboardActivity.this,TemplatesListActivity.class));
         }else if (id == R.id.nav_notifications) {
+            startActivity(new Intent(DashboardActivity.this,NotificationsActivity.class));
 
         }else if (id == R.id.nav_buy_credit) {
 

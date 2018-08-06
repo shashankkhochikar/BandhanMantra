@@ -32,4 +32,10 @@
 
     <string name="action_settings">Settings</string>
 
+    <string-array name="duration_array">
+        <item>Days</item>
+        <item>Weeks</item>
+        <item>Months</item>
+    </string-array>
+
 </resources>

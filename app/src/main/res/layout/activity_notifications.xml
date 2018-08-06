@@ -5,18 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bandhan.mantra.activities.ContactGroupsListActivity">
+    tools:context="com.bandhan.mantra.activities.CampaignsListActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <ListView
-            android:id="@+id/CouponCampaignsListRecyclerView"
+            android:id="@+id/NotificationListRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/coupon_campaigns_list_recycleitem" />
+            tools:listitem="@layout/campaigns_list_recycleitem" />
     </LinearLayout>
-
 </android.support.design.widget.CoordinatorLayout>
