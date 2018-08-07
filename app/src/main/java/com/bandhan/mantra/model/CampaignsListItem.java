@@ -318,4 +318,37 @@ public class CampaignsListItem implements Serializable
         this.templateDTO = templateDTO;
     }
 
+    @Override
+    public String toString() {
+        return "CampaignsListItem{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", recipientsNumber='" + recipientsNumber + '\'' +
+                ", recipientsCount=" + recipientsCount +
+                ", message='" + message + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                ", isScheduled=" + isScheduled +
+                ", scheduledDate='" + scheduledDate + '\'' +
+                ", scheduledTime='" + scheduledTime + '\'' +
+                ", iPAddress='" + iPAddress + '\'' +
+                ", messageCount=" + messageCount +
+                ", requiredCredits=" + requiredCredits +
+                ", status='" + status + '\'' +
+                ", remark='" + remark + '\'' +
+                ", clientId=" + clientId +
+                ", createdBy=" + createdBy +
+                ", groupId=" + groupId +
+                ", groupName='" + groupName + '\'' +
+                ", isUnicode=" + isUnicode +
+                ", languageCode='" + languageCode + '\'' +
+                ", groupContactCount=" + groupContactCount +
+                ", forAllContact=" + forAllContact +
+                ", consumedCredits=" + consumedCredits +
+                ", creditsDiffrence=" + creditsDiffrence +
+                ", isReconcile=" + isReconcile +
+                ", reconcileDate='" + reconcileDate + '\'' +
+                ", recurringCampaignId=" + recurringCampaignId +
+                ", templateDTO=" + templateDTO +
+                '}';
+    }
 }

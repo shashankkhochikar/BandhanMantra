@@ -27,6 +27,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.bandhan.mantra.R;
 import com.bandhan.mantra.baseclasses.BaseActivity;
 import com.bandhan.mantra.model.CampaignsListItem;
+import com.bandhan.mantra.model.TemplateItem;
 import com.bandhan.mantra.volley.VolleySingleton;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -89,7 +90,7 @@ public class CreateCampaignActivity extends BaseActivity {
 
         assignViews();
 
-        simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
         Bundle extras = getIntent().getExtras();
         isEdit = extras.getBoolean("isEdit");
@@ -215,7 +216,7 @@ public class CreateCampaignActivity extends BaseActivity {
                 if(isEdit){
                     if(validate()){
                         //showToast(""+getValues(contactData,clientId));
-                        //updateContact(getValues(contactData,clientId),contactGroupItemData);
+                        updateCampaign(getValues(campaignsListItem,clientId),campaignsListItem);
                     }
                 }else if(!isEdit){
                     if(validate()){
@@ -226,6 +227,8 @@ public class CreateCampaignActivity extends BaseActivity {
             }
         });
     }
+
+
 
     private boolean validate() {
         boolean bln = true;
@@ -401,6 +404,13 @@ public class CreateCampaignActivity extends BaseActivity {
         int spinnerPosition1 = LanguageArrayAdapter.getPosition(campaignsListItem.getLanguageCode());
         mSpnCampaignGroup.setSelection(spinnerPosition1);*/
 
+       Log.v(CreateCampaignActivity.class.getName(),""+campaignsListItem.toString());
+       /* TemplateItem templateItem = campaignsListItem.getTemplateDTO();
+        if (templateItem.getMessage() != null) {
+            int spinnerPosition = TemplateListArrayAdapter.getPosition(templateItem.getMessage());
+            mSpnCampaignTemplate.setSelection(spinnerPosition);
+        }*/
+
     }
 
     private void assignViews() {
@@ -449,7 +459,7 @@ public class CreateCampaignActivity extends BaseActivity {
             values.put("Message",""+mEdtCampaignMsg.getText().toString());
 
             Date c = Calendar.getInstance().getTime();
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             String formattedDate = df.format(c);
             values.put("CreatedDate",""+formattedDate);
 
@@ -458,9 +468,13 @@ public class CreateCampaignActivity extends BaseActivity {
                 values.put("ScheduledDate",""+mEdtScheduledDate.getText().toString());
                 values.put("ScheduledTime",""+mEdtScheduledTime.getText().toString());
             }else if(mRadioButtonNow.isChecked()){
+                final Calendar c1 = Calendar.getInstance();
+                int mHour = c1.get(Calendar.HOUR_OF_DAY);
+                int mMinute = c1.get(Calendar.MINUTE);
+                String formattedTime = mHour+":"+mMinute;
                 values.put("IsScheduled",false);
-                values.put("ScheduledDate","");
-                values.put("ScheduledTime","");
+                values.put("ScheduledDate",formattedDate);
+                values.put("ScheduledTime",formattedTime);
             }
             values.put("IPAddress","");
             values.put("MessageCount",1);
@@ -496,14 +510,13 @@ public class CreateCampaignActivity extends BaseActivity {
             JSONObject params = jsonObject;
 
             final String requestBody = params.toString();
-            Log.v(CreateCampaignActivity.class.getName(),requestBody);
-
+            Log.v(CreateCampaignActivity.class.getName(),"createCampaign\n"+requestBody);
 
             StringRequest createCampaignRequest = new StringRequest(Request.Method.POST, VolleySingleton.getWsBaseUrl() + "Campaign/CreateCampaign", new Response.Listener<String>() {
                 @Override
                 public void onResponse(String Response) {
                     hideBusyProgress();
-                    Log.v(CreateContactActivity.class.getName(), "onResponse :" + Response.toString());
+                    Log.v(CreateCampaignActivity.class.getName(), "onResponse :" + Response.toString());
                     if (!Response.equals("")) {
                         //getGroupListByClientId(clientId);
                         showToast("Ok");
@@ -517,7 +530,7 @@ public class CreateCampaignActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError e) {
                     e.printStackTrace();
                     hideBusyProgress();
-                    Log.v(CreateContactActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
+                    Log.v(CreateCampaignActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
                     showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
                 }
             }) {
@@ -539,7 +552,60 @@ public class CreateCampaignActivity extends BaseActivity {
             VolleySingleton.getInstance().addToRequestQueue(createCampaignRequest);
         } catch (Exception e) {
             hideBusyProgress();
-            Log.v(CreateContactActivity.class.getName(), "Exception" + e.getMessage().toString());
+            Log.v(CreateCampaignActivity.class.getName(), "Exception" + e.getMessage().toString());
+            showToast("Exception " + e.getMessage().toString());
+        }
+    }
+
+    private void updateCampaign(JSONObject jsonObject, CampaignsListItem campaignsListItem) {
+        try {
+            showBusyProgress();
+            JSONObject params = jsonObject;
+
+            final String requestBody = params.toString();
+            Log.v(CreateCampaignActivity.class.getName(),"updateCampaign"+requestBody);
+
+            StringRequest updateCampaignRequest = new StringRequest(Request.Method.POST, VolleySingleton.getWsBaseUrl() + "Campaign/EditCampaign?accessId="+accessId, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String Response) {
+                    hideBusyProgress();
+                    Log.v(CreateCampaignActivity.class.getName(), "onResponse :" + Response.toString());
+                    if (Response.equals("")) {
+                        //getGroupListByClientId(clientId);
+                        showToast("Ok");
+                        finish();
+                    } else {
+                        showToast("Invalid Response");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError e) {
+                    e.printStackTrace();
+                    hideBusyProgress();
+                    Log.v(CreateCampaignActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
+                    showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            VolleySingleton.getInstance().addToRequestQueue(updateCampaignRequest);
+        } catch (Exception e) {
+            hideBusyProgress();
+            Log.v(CreateCampaignActivity.class.getName(), "Exception" + e.getMessage().toString());
             showToast("Exception " + e.getMessage().toString());
         }
     }

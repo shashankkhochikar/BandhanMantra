@@ -35,7 +35,7 @@ public class BandhanMantraApp extends Application {
 //        initImageLoader(getApplicationContext());
 
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
         Calendar calendar = Calendar.getInstance();
 

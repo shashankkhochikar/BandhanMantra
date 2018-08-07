@@ -82,7 +82,7 @@ public class CreateCouponCampaignActivity extends BaseActivity {
         setContentView(R.layout.activity_create_coupon_campaign);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         assignViews();
-        simpleDateFormat = new SimpleDateFormat("dd MM yyyy", Locale.US);
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         Bundle extras = getIntent().getExtras();
         isEdit = extras.getBoolean("isEdit");
         if(isEdit){

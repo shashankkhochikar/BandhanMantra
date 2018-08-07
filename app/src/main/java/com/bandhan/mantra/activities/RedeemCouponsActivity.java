@@ -80,7 +80,7 @@ public class RedeemCouponsActivity extends BaseActivity {
             showBusyProgress();
 
             Date c = Calendar.getInstance().getTime();
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             String formattedDate = df.format(c);
 
             JSONObject params = new JSONObject();
