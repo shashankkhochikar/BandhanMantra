@@ -16,7 +16,7 @@
             android:id="@+id/RecurringCampaignListRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/campaigns_list_recycleitem" />
+            tools:listitem="@layout/recurring_campaigns_list_recycleitem" />
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
