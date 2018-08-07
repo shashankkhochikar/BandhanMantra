@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -44,6 +45,8 @@ public class ContactListActivity extends BaseActivity {
     private ContactGroupItemData contactGroupItemData;
     private LinearLayout linearLayoutContactItem;
     private List<Datum> checkedContacts;
+    int current_page = 1;
+    private List<Datum> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class ContactListActivity extends BaseActivity {
         contactListListView = (ListView) findViewById(R.id.ConactListRecyclerView);
         linearLayoutContactItem = (LinearLayout)findViewById(R.id.linearLayoutContactItem);
         checkedContacts = new ArrayList<Datum>();
+        data = new ArrayList<Datum>();
 
         Bundle extras = getIntent().getExtras();
         clientId = extras.getInt("clientId");
@@ -100,6 +104,26 @@ public class ContactListActivity extends BaseActivity {
 
             }
         };
+        contactListListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                int threshold = 1;
+                int count = contactListListView.getCount();
+
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    if (contactListListView.getLastVisiblePosition() >= count - threshold ) {
+                        Log.i(ContactListActivity.class.getName(), "loading more data");
+                        // Execute LoadMoreDataTask AsyncTask
+                        getGroupContactsByClientID(clientId, groupId);
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
     }
 
     private void deleteSingleContact(Datum datum, final int position) {
@@ -165,12 +189,13 @@ public class ContactListActivity extends BaseActivity {
     private void getGroupContactsByClientID(final int clientId, final Integer groupId) {
         try {
             showBusyProgress();
+            current_page += 1;
             Map<String, String> params = new HashMap<String, String>();
             params.put("ClientId", "" + clientId);
             String urlWithParams =createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Contact/GetGroupIdWisePresentContactsPagedListByClientId", params);
 //"http://35.231.207.193/msgAPI/api/Contact/GetGroupIdWisePresentContactsPagedListByClientId?ClientId=1";
             final JSONObject request = new JSONObject();
-            request.put("Page", "1");
+            request.put("Page", current_page);
             request.put("ItemsPerPage", "10");
             request.put("SortBy", "");
             request.put("Reverse", "true");
@@ -190,7 +215,10 @@ public class ContactListActivity extends BaseActivity {
                             Log.v(ContactListActivity.class.getName(), "onResponse"+response.toString());
                             if(response.getData() != null)
                             {
-                                contactListAdapter = new ContactListAdapter(ContactListActivity.this,response.getData(),onButtonActionListener);
+                                for(int i=0;i<response.getData().size();i++){
+                                    data.add(response.getData().get(i));
+                                }
+                                contactListAdapter = new ContactListAdapter(ContactListActivity.this,data,onButtonActionListener);
                                 contactListListView.setAdapter(contactListAdapter);
                             }
                         }

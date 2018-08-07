@@ -83,26 +83,87 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
         if(isEdit){
             clientId=extras.getInt("clientId");
             item = (Item) getIntent().getSerializableExtra("recurringCampaignData");
-           // setValues(campaignsListItem);
+            setValues(item);
             for (int i = 0; i < mContainer.getChildCount();  i++ ){
                 View view = mContainer.getChildAt(i);
                 view.setEnabled(false); // Or whatever you want to do with the view.
             }
         }else if(!isEdit){
             clientId=extras.getInt("clientId");
-           // clearData();
+            clearData();
         }
         setGroupListSpinner(clientId);
         setTemplateListSpinner(clientId);
          /*setLanguageSpinner();
         setListners();*/
     }
+    private void clearData(){
+        mEtdName.setText("");
+        mEdtCampaignMsg.setText("");
+        mEtdRecurrenceDays.setText("");
+        mEtdSetEndDate.setText("");
+        mRadioGroup.clearCheck();
+        mRadioGroupRecurrence.clearCheck();
+        mRadioGroupEndingDate.clearCheck();
+    }
+
+    private void setValues(Item item) {
+        mEtdName.setText(item.getName());
+        mEdtCampaignMsg.setText(item.getMessage());
+        mEtdRecurrenceDays.setText("");
+        mEtdSetEndDate.setText(item.getEndDate());
+    }
+
+    private boolean validate() {
+        boolean bln = true;
+
+        String name = mEtdName.getText().toString().trim();
+        String campaignMsg = mEdtCampaignMsg.getText().toString().trim();
+        String campaignRemark = mEtdRecurrenceDays.getText().toString().trim();
+
+
+        if (name.length() == 0) {
+            mEtdName.setBackgroundResource(R.drawable.red_border);
+            mEtdName.setHint("Set Name");
+            // getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.password_blank), true, null).show();
+            bln = false;
+        } else if (campaignMsg.length() == 0) {
+            mEdtCampaignMsg.setBackgroundResource(R.drawable.red_border);
+            mEdtCampaignMsg.setHint("Set Message");
+            // getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.password_blank), true, null).show();
+            bln = false;
+        } else if (campaignRemark.length() == 0) {
+            mEtdRecurrenceDays.setBackgroundResource(R.drawable.red_border);
+            mEtdRecurrenceDays.setHint("Set Days");
+            // getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.password_blank), true, null).show();
+            bln = false;
+        }else if (selectedGroup.equals("")) {
+            showToast("Select Group");
+            // getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.password_blank), true, null).show();
+            bln = false;
+        }else if (selectedLanguageId.equals("")) {
+            showToast("Select Language");
+            // getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.password_blank), true, null).show();
+            bln = false;
+        }else if (selectedTemplate.equals("")) {
+            showToast("Select Template");
+            // getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.password_blank), true, null).show();
+            bln = false;
+        }else if(mRadioGroup.getCheckedRadioButtonId() == -1){
+            showToast("Select Type");
+            bln = false;
+        }
+        else if(mRadioGroupRecurrence.getCheckedRadioButtonId() == -1){
+            showToast("Select Recurrence Type");
+            bln = false;
+        }
+        return bln;
+    }
 
     private void assignViews() {
         mContainer = (LinearLayout) findViewById(R.id.container);
         mEtdName = (TextInputEditText) findViewById(R.id.etdName);
         mSpnCampaignGroup = (Spinner) findViewById(R.id.spnCampaignGroup);
-        mSpnCampaignSubGroup = (Spinner) findViewById(R.id.spnCampaignSubGroup);
         mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         mRadioButtonCampaign = (RadioButton) findViewById(R.id.radioButtonCampaign);
         mRadioButtonCoupon = (RadioButton) findViewById(R.id.radioButtonCoupon);
@@ -120,7 +181,6 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
         mEtdSetEndDate = (TextInputEditText) findViewById(R.id.etdSetEndDate);
         mBtnSubmit = (Button) findViewById(R.id.btnSubmit);
     }
-
 
     private void setTemplateListSpinner(int clientId) {
         try {

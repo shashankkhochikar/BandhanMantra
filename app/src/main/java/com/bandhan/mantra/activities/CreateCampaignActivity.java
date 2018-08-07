@@ -434,7 +434,6 @@ public class CreateCampaignActivity extends BaseActivity {
         mEdtCampaignRemark.setText("");
     }
 
-
     private JSONObject getValues(CampaignsListItem campaignsListItem, int clientId){
         try {
             JSONObject values = new JSONObject();
