@@ -29,6 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -180,6 +182,103 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
         mRadioButtonSetEndDate = (RadioButton) findViewById(R.id.radioButtonSetEndDate);
         mEtdSetEndDate = (TextInputEditText) findViewById(R.id.etdSetEndDate);
         mBtnSubmit = (Button) findViewById(R.id.btnSubmit);
+    }
+
+    private JSONObject getValues(Item item, int clientId){
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        String formattedDate = df.format(c);
+
+        final Calendar c1 = Calendar.getInstance();
+        int mHour = c1.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c1.get(Calendar.MINUTE);
+        String formattedTime = mHour+":"+mMinute;
+
+        try {
+            JSONObject values = new JSONObject();
+            if(isEdit){
+                values.put("Id",item.getId());
+            }else if(!isEdit){
+                values.put("Id",0);
+
+            }
+            values.put("Name",mEtdName.getText());
+            values.put("Message",mEdtCampaignMsg.getText());
+            values.put("StartDate",formattedDate);
+            values.put("StartTime",formattedTime);
+            if(mRadioButtonSetEndDate.isChecked()) {
+                values.put("IsEndDate",0);
+                values.put("EndDate", mEtdSetEndDate.getText().toString());
+                values.put("EndTime", formattedTime);
+            }else if(mRadioButtonNoEndDate.isChecked()){
+                values.put("IsEndDate",0);
+                values.put("EndDate", formattedDate);
+                values.put("EndTime", formattedTime);
+            }
+            values.put("IPAddress","");
+            if(mRadioButtonCoupon.isChecked()){
+                values.put("IsCoupon",true);
+            }else {
+                values.put("IsCoupon",false);
+            }
+            values.put("CouponExpire",0);
+
+            int selectedId = mRadioGroupRecurrence.getCheckedRadioButtonId();
+            RadioButton radioButton = (RadioButton) findViewById(selectedId);
+            values.put("CouponExpireType",radioButton.getText());
+
+            values.put("MinPurchaseAmount",0);
+            values.put("CreatedDate",formattedDate);
+            values.put("SendDate",formattedTime);
+
+            values.put("IsBirthday",0);
+            values.put("IsAnniversary",0);
+            values.put("GenderType","None");
+            values.put("IsRecurring",0);
+            if(mRadioButtonDaily.isChecked()){
+                values.put("IsDay",true);
+                values.put("DayValue",mEtdRecurrenceDays.getText());
+            }else if(mRadioButtonMonthly.isChecked()){
+                values.put("IsMonth",true);
+
+            }else if(mRadioButtonWeekly.isChecked()){
+                values.put("IsWeek",true);
+            }else {
+                values.put("IsDay",false);
+                values.put("IsMonth",false);
+                values.put("IsWeek",false);
+            }
+
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+            values.put("Id",0);
+
+
+
+            return values;
+        }catch (JSONException ex){
+            showToast("getValues JSONException\n"+ex.getMessage().toString());
+            return null;
+        }
+
     }
 
     private void setTemplateListSpinner(int clientId) {
