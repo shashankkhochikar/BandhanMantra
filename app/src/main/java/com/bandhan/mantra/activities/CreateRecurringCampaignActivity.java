@@ -103,9 +103,13 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
         }
         setGroupListSpinner(clientId);
         setTemplateListSpinner(clientId);
-         /*setLanguageSpinner();
-        setListners();*/
+       
+        setListners();
     }
+
+    private void setListners() {
+    }
+
     private void assignViews() {
         mContainer = (LinearLayout) findViewById(R.id.container);
         mEtdName = (TextInputEditText) findViewById(R.id.etdName);

@@ -45,7 +45,7 @@ public class ContactListActivity extends BaseActivity {
     private ContactGroupItemData contactGroupItemData;
     private LinearLayout linearLayoutContactItem;
     private List<Datum> checkedContacts;
-    int current_page = 1;
+    int current_page = 0;
     private List<Datum> data;
 
     @Override
@@ -62,7 +62,7 @@ public class ContactListActivity extends BaseActivity {
         clientId = extras.getInt("clientId");
         contactGroupItemData = (ContactGroupItemData) getIntent().getSerializableExtra("groupData");
         groupId = extras.getInt("groupId");
-        getGroupContactsByClientID(clientId, groupId);
+        getGroupContactsByClientID(clientId, contactGroupItemData.getId());
 
         onButtonActionListener = new ContactListAdapter.OnButtonActionListener() {
             @Override
@@ -198,9 +198,9 @@ public class ContactListActivity extends BaseActivity {
             request.put("Page", current_page);
             request.put("ItemsPerPage", "10");
             request.put("SortBy", "");
-            request.put("Reverse", "true");
+            request.put("Reverse", "false");
             request.put("Search", "");
-            request.put("GroupId", ""+groupId);
+            request.put("GroupId", groupId);
             Log.v(ContactListActivity.class.getName(),request.toString());
 
             GsonRequest<GroupContactsByClientIdData> getGroupContactsByClientIDRequest = new GsonRequest<GroupContactsByClientIdData>(
