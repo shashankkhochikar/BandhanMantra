@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -159,7 +160,57 @@
 
 
                 </RadioGroup>
+                <LinearLayout
+                    android:id="@+id/RecurrenceDays"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:visibility="gone">
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/app_normal_margin">
 
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/etdRecurrenceDays"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Recurrence Days"
+                            android:inputType="text"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/RecurrenceMonths"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:visibility="gone">
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/app_normal_margin">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/etdRecurrenceMonths"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Recurrence Months"
+                            android:inputType="text"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/RecurrenceWeeks"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:visibility="visible">
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -167,17 +218,13 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/app_normal_margin">
 
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/etdRecurrenceDays"
+                    <com.bandhan.mantra.commons.WeekdaysWidget
+                        android:id="@+id/widget1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Recurrence Days"
-                        android:inputType="text"
-                        />
+                        app:editable="true"/>
                 </android.support.design.widget.TextInputLayout>
-
             </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

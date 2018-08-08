@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bandhan.mantra.R;
 import com.bandhan.mantra.baseclasses.BaseActivity;
+import com.bandhan.mantra.commons.WeekdaysWidget;
 import com.bandhan.mantra.model.Item;
 import com.bandhan.mantra.volley.VolleySingleton;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
@@ -40,18 +41,22 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
     private LinearLayout mContainer;
     private TextInputEditText mEtdName;
     private Spinner mSpnCampaignGroup;
-    private Spinner mSpnCampaignSubGroup;
+    private Spinner mSpnCampaignSubgroup;
     private RadioGroup mRadioGroup;
     private RadioButton mRadioButtonCampaign;
     private RadioButton mRadioButtonCoupon;
-    private Spinner mSpnCampaignSubgroup;
     private Spinner mSpnCampaignTemplate;
     private TextInputEditText mEdtCampaignMsg;
     private RadioGroup mRadioGroupRecurrence;
     private RadioButton mRadioButtonDaily;
     private RadioButton mRadioButtonWeekly;
     private RadioButton mRadioButtonMonthly;
+    private LinearLayout mRecurrenceDays;
     private TextInputEditText mEtdRecurrenceDays;
+    private LinearLayout mRecurrenceMonths;
+    private TextInputEditText mEtdRecurrenceMonths;
+    private LinearLayout mRecurrenceWeeks;
+    private WeekdaysWidget mWidget1;
     private RadioGroup mRadioGroupEndingDate;
     private RadioButton mRadioButtonNoEndDate;
     private RadioButton mRadioButtonSetEndDate;
@@ -59,6 +64,7 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
     private Button mBtnSubmit;
     private Item item;
 
+    private WeekdaysWidget widget;
     private ArrayAdapter TemplateListArrayAdapter;
     private ArrayAdapter GroupListArrayAdapter;
     private ArrayAdapter LanguageArrayAdapter;
@@ -79,6 +85,7 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
         setContentView(R.layout.activity_create_recurring_campaign);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         assignViews();
+        widget = (WeekdaysWidget) findViewById(R.id.widget1);
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         Bundle extras = getIntent().getExtras();
         isEdit = extras.getBoolean("isEdit");
@@ -99,6 +106,33 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
          /*setLanguageSpinner();
         setListners();*/
     }
+    private void assignViews() {
+        mContainer = (LinearLayout) findViewById(R.id.container);
+        mEtdName = (TextInputEditText) findViewById(R.id.etdName);
+        mSpnCampaignGroup = (Spinner) findViewById(R.id.spnCampaignGroup);
+        mSpnCampaignSubgroup = (Spinner) findViewById(R.id.spnCampaignSubgroup);
+        mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        mRadioButtonCampaign = (RadioButton) findViewById(R.id.radioButtonCampaign);
+        mRadioButtonCoupon = (RadioButton) findViewById(R.id.radioButtonCoupon);
+        mSpnCampaignTemplate = (Spinner) findViewById(R.id.spnCampaignTemplate);
+        mEdtCampaignMsg = (TextInputEditText) findViewById(R.id.edtCampaignMsg);
+        mRadioGroupRecurrence = (RadioGroup) findViewById(R.id.radioGroupRecurrence);
+        mRadioButtonDaily = (RadioButton) findViewById(R.id.radioButtonDaily);
+        mRadioButtonWeekly = (RadioButton) findViewById(R.id.radioButtonWeekly);
+        mRadioButtonMonthly = (RadioButton) findViewById(R.id.radioButtonMonthly);
+        mRecurrenceDays = (LinearLayout) findViewById(R.id.RecurrenceDays);
+        mEtdRecurrenceDays = (TextInputEditText) findViewById(R.id.etdRecurrenceDays);
+        mRecurrenceMonths = (LinearLayout) findViewById(R.id.RecurrenceMonths);
+        mEtdRecurrenceMonths = (TextInputEditText) findViewById(R.id.etdRecurrenceMonths);
+        mRecurrenceWeeks = (LinearLayout) findViewById(R.id.RecurrenceWeeks);
+        mWidget1 = (WeekdaysWidget) findViewById(R.id.widget1);
+        mRadioGroupEndingDate = (RadioGroup) findViewById(R.id.radioGroupEndingDate);
+        mRadioButtonNoEndDate = (RadioButton) findViewById(R.id.radioButtonNoEndDate);
+        mRadioButtonSetEndDate = (RadioButton) findViewById(R.id.radioButtonSetEndDate);
+        mEtdSetEndDate = (TextInputEditText) findViewById(R.id.etdSetEndDate);
+        mBtnSubmit = (Button) findViewById(R.id.btnSubmit);
+    }
+
     private void clearData(){
         mEtdName.setText("");
         mEdtCampaignMsg.setText("");
@@ -162,28 +196,6 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
         return bln;
     }
 
-    private void assignViews() {
-        mContainer = (LinearLayout) findViewById(R.id.container);
-        mEtdName = (TextInputEditText) findViewById(R.id.etdName);
-        mSpnCampaignGroup = (Spinner) findViewById(R.id.spnCampaignGroup);
-        mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-        mRadioButtonCampaign = (RadioButton) findViewById(R.id.radioButtonCampaign);
-        mRadioButtonCoupon = (RadioButton) findViewById(R.id.radioButtonCoupon);
-        mSpnCampaignSubgroup = (Spinner) findViewById(R.id.spnCampaignSubgroup);
-        mSpnCampaignTemplate = (Spinner) findViewById(R.id.spnCampaignTemplate);
-        mEdtCampaignMsg = (TextInputEditText) findViewById(R.id.edtCampaignMsg);
-        mRadioGroupRecurrence = (RadioGroup) findViewById(R.id.radioGroupRecurrence);
-        mRadioButtonDaily = (RadioButton) findViewById(R.id.radioButtonDaily);
-        mRadioButtonWeekly = (RadioButton) findViewById(R.id.radioButtonWeekly);
-        mRadioButtonMonthly = (RadioButton) findViewById(R.id.radioButtonMonthly);
-        mEtdRecurrenceDays = (TextInputEditText) findViewById(R.id.etdRecurrenceDays);
-        mRadioGroupEndingDate = (RadioGroup) findViewById(R.id.radioGroupEndingDate);
-        mRadioButtonNoEndDate = (RadioButton) findViewById(R.id.radioButtonNoEndDate);
-        mRadioButtonSetEndDate = (RadioButton) findViewById(R.id.radioButtonSetEndDate);
-        mEtdSetEndDate = (TextInputEditText) findViewById(R.id.etdSetEndDate);
-        mBtnSubmit = (Button) findViewById(R.id.btnSubmit);
-    }
-
     private JSONObject getValues(Item item, int clientId){
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -240,38 +252,105 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
                 values.put("DayValue",mEtdRecurrenceDays.getText());
             }else if(mRadioButtonMonthly.isChecked()){
                 values.put("IsMonth",true);
+                values.put("MonthValue",mEtdRecurrenceMonths.getText().toString());
+                values.put("MonthDayValue",0);
 
             }else if(mRadioButtonWeekly.isChecked()){
                 values.put("IsWeek",true);
+                values.put("WeekValue","");
+                for(int i=0;i<widget.getSelectedDays().size();i++)
+                {
+                    int dayNumber = widget.getSelectedDays().get(i);
+                    switch (dayNumber){
+                        case 1:values.put("Sunday",true);
+
+                            values.put("Monday",false);
+                            values.put("Tuesday",false);
+                            values.put("Wednesday",false);
+                            values.put("Thursday",false);
+                            values.put("Friday",false);
+                            values.put("Saturday",false);
+                            break;
+                        case 2:values.put("Monday",true);
+
+                            values.put("Sunday",false);
+                            values.put("Tuesday",false);
+                            values.put("Wednesday",false);
+                            values.put("Thursday",false);
+                            values.put("Friday",false);
+                            values.put("Saturday",false);
+                            break;
+                        case 3:values.put("Tuesday",true);
+
+                            values.put("Sunday",false);
+                            values.put("Monday",false);
+                            values.put("Wednesday",false);
+                            values.put("Thursday",false);
+                            values.put("Friday",false);
+                            values.put("Saturday",false);
+                            break;
+                        case 4:values.put("Wednesday",true);
+
+                            values.put("Sunday",false);
+                            values.put("Monday",false);
+                            values.put("Tuesday",false);
+                            values.put("Thursday",false);
+                            values.put("Friday",false);
+                            values.put("Saturday",false);
+                            break;
+                        case 5:values.put("Thursday",true);
+
+                            values.put("Sunday",false);
+                            values.put("Monday",false);
+                            values.put("Tuesday",false);
+                            values.put("Wednesday",false);
+                            values.put("Friday",false);
+                            values.put("Saturday",false);
+                            break;
+                        case 6:values.put("Friday",true);
+
+                            values.put("Sunday",false);
+                            values.put("Monday",false);
+                            values.put("Tuesday",false);
+                            values.put("Wednesday",false);
+                            values.put("Thursday",false);
+                            values.put("Saturday",false);
+                            break;
+                        case 7:values.put("Saturday",true);
+
+                            values.put("Sunday",false);
+                            values.put("Monday",false);
+                            values.put("Tuesday",false);
+                            values.put("Wednesday",false);
+                            values.put("Thursday",false);
+                            values.put("Friday",false);
+                            break;
+                        default:
+                            values.put("Sunday",false);
+                            values.put("Monday",false);
+                            values.put("Tuesday",false);
+                            values.put("Wednesday",false);
+                            values.put("Thursday",false);
+                            values.put("Friday",false);
+                            values.put("Saturday",false);
+                            break;
+                    }
+                }
             }else {
                 values.put("IsDay",false);
                 values.put("IsMonth",false);
                 values.put("IsWeek",false);
             }
 
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-            values.put("Id",0);
-
-
+            values.put("ClientId",clientId);
+            values.put("CreatedBy",clientId);
+            values.put("GroupId",selectedGroup.get("Id"));
+            values.put("GroupName",""+selectedGroup.get("Name"));
+            values.put("GroupContactCount",""+selectedGroup.get("ContactCount"));
+            values.put("IsActive",true);
+            values.put("ForAllContact",true);
+            values.put("LastCampaignId","");
+            values.put("TemplateDTO",selectedTemplate);
 
             return values;
         }catch (JSONException ex){
