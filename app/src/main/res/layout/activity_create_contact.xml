@@ -114,7 +114,10 @@
                     android:drawableRight="@drawable/ic_calendar"
                     android:hint="Birth Date"
                     android:inputType="date"
-                    android:textAlignment="viewStart" />
+                    android:textAlignment="viewStart"
+                    android:clickable="true"
+                    android:editable="false"
+                    android:focusable="false"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -127,7 +130,10 @@
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_calendar"
                     android:hint="Anniversary"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:clickable="true"
+                    android:editable="false"
+                    android:focusable="false"/>
             </android.support.design.widget.TextInputLayout>
 
             <Button

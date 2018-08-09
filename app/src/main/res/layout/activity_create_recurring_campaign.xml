@@ -85,6 +85,64 @@
                     android:text="Coupon"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </RadioGroup>
+            <LinearLayout
+                android:id="@+id/linearLayoutExpireAfter"
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Expires After" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+
+                        <EditText
+                            android:id="@+id/edtExpiryAfter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="count"
+                            android:inputType="number" />
+
+                        <Spinner
+                            android:id="@+id/spnExpiresAfter"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:entries="@array/duration_array"/>
+
+                    </LinearLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edtMinPurchaseAmt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Min Purchase Amount"
+                            android:inputType="number" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -204,13 +262,14 @@
                             />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/RecurrenceWeeks"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
-                android:visibility="visible">
+                android:visibility="gone">
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -226,6 +285,7 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
         <LinearLayout
+            android:id="@+id/linearLayoutSetEndDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -275,7 +335,10 @@
                     android:layout_height="wrap_content"
                     android:hint="End Date"
                     android:inputType="date"
-                    android:drawableRight="@drawable/ic_calendar"/>
+                    android:drawableRight="@drawable/ic_calendar"
+                    android:clickable="true"
+                    android:editable="false"
+                    android:focusable="false"/>
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 

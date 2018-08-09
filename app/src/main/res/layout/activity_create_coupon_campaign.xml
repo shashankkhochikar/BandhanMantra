@@ -125,7 +125,10 @@
                         android:layout_height="match_parent"
                         android:drawableRight="@drawable/ic_calendar"
                         android:hint="Expiry Date"
-                        android:inputType="time" />
+                        android:inputType="time"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:focusable="false"/>
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -184,7 +187,10 @@
                         android:layout_height="wrap_content"
                         android:drawableRight="@drawable/ic_calendar"
                         android:hint="Scheduled Date"
-                        android:inputType="date" />
+                        android:inputType="date"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:focusable="false"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -198,7 +204,10 @@
                         android:layout_height="wrap_content"
                         android:drawableRight="@drawable/ic_calendar"
                         android:hint="Scheduled Time"
-                        android:inputType="time" />
+                        android:inputType="time"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:focusable="false"/>
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 

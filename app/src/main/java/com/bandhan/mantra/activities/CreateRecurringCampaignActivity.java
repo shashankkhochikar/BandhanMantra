@@ -1,5 +1,6 @@
 package com.bandhan.mantra.activities;
 
+import android.annotation.SuppressLint;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -23,6 +25,8 @@ import com.bandhan.mantra.baseclasses.BaseActivity;
 import com.bandhan.mantra.commons.WeekdaysWidget;
 import com.bandhan.mantra.model.Item;
 import com.bandhan.mantra.volley.VolleySingleton;
+import com.tsongkha.spinnerdatepicker.DatePicker;
+import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import org.json.JSONArray;
@@ -32,6 +36,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -45,6 +50,10 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
     private RadioGroup mRadioGroup;
     private RadioButton mRadioButtonCampaign;
     private RadioButton mRadioButtonCoupon;
+    private LinearLayout mLinearLayoutExpireAfter;
+    private EditText mEdtExpiryAfter;
+    private Spinner mSpnExpiresAfter;
+    private TextInputEditText mEdtMinPurchaseAmt;
     private Spinner mSpnCampaignTemplate;
     private TextInputEditText mEdtCampaignMsg;
     private RadioGroup mRadioGroupRecurrence;
@@ -57,6 +66,7 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
     private TextInputEditText mEtdRecurrenceMonths;
     private LinearLayout mRecurrenceWeeks;
     private WeekdaysWidget mWidget1;
+    private LinearLayout mLinearLayoutSetEndDate;
     private RadioGroup mRadioGroupEndingDate;
     private RadioButton mRadioButtonNoEndDate;
     private RadioButton mRadioButtonSetEndDate;
@@ -74,7 +84,7 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
     private int clientId=0;
     private boolean isEdit = false;
     private SimpleDateFormat simpleDateFormat;
-    private SpinnerDatePickerDialogBuilder ScheduledDatePickerDialogBuilder;
+    private SpinnerDatePickerDialogBuilder EndDatePickerDialogBuilder;
     private JSONObject selectedGroup;
     private JSONObject selectedTemplate;
     private String selectedLanguageId;
@@ -108,7 +118,80 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
     }
 
     private void setListners() {
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                if (null != rb && checkedId > -1) {
+                    if(mRadioButtonCoupon.isChecked()){
+                        mLinearLayoutExpireAfter.setVisibility(View.VISIBLE);
+                    }else {
+                        mLinearLayoutExpireAfter.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+        mRadioGroupRecurrence.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                if (null != rb && checkedId > -1) {
+                    if (mRadioButtonDaily.isChecked()) {
+                        mRecurrenceDays.setVisibility(View.VISIBLE);
+                        mRecurrenceMonths.setVisibility(View.GONE);
+                        mRecurrenceWeeks.setVisibility(View.GONE);
+                    }
+                    if (mRadioButtonWeekly.isChecked()) {
+                        mRecurrenceDays.setVisibility(View.GONE);
+                        mRecurrenceMonths.setVisibility(View.GONE);
+                        mRecurrenceWeeks.setVisibility(View.VISIBLE);
+                    }
+                    if (mRadioButtonMonthly.isChecked()) {
+                        mRecurrenceDays.setVisibility(View.GONE);
+                        mRecurrenceMonths.setVisibility(View.VISIBLE);
+                        mRecurrenceWeeks.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+        mRadioGroupEndingDate.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton rb = (RadioButton) group.findViewById(checkedId);
+                if (null != rb && checkedId > -1) {
+                    if(mRadioButtonSetEndDate.isChecked()){
+                        //mLinearLayoutSetEndDate.setVisibility(View.VISIBLE);
+                        mEtdSetEndDate.setVisibility(View.VISIBLE);
+                    }else {
+                        //mLinearLayoutSetEndDate.setVisibility(View.GONE);
+                        mEtdSetEndDate.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+        EndDatePickerDialogBuilder = new SpinnerDatePickerDialogBuilder().context(CreateRecurringCampaignActivity.this);
+        mEtdSetEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EndDatePickerDialogBuilder.spinnerTheme(R.style.DatePickerSpinner)
+                        .defaultDate(1980, 0, 1)
+                        .build().show();
+            }
+        });
+        EndDatePickerDialogBuilder.callback(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
+                mEtdSetEndDate.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        });
+
     }
+
 
     private void assignViews() {
         mContainer = (LinearLayout) findViewById(R.id.container);
@@ -118,6 +201,10 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
         mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         mRadioButtonCampaign = (RadioButton) findViewById(R.id.radioButtonCampaign);
         mRadioButtonCoupon = (RadioButton) findViewById(R.id.radioButtonCoupon);
+        mLinearLayoutExpireAfter = (LinearLayout) findViewById(R.id.linearLayoutExpireAfter);
+        mEdtExpiryAfter = (EditText) findViewById(R.id.edtExpiryAfter);
+        mSpnExpiresAfter = (Spinner) findViewById(R.id.spnExpiresAfter);
+        mEdtMinPurchaseAmt = (TextInputEditText) findViewById(R.id.edtMinPurchaseAmt);
         mSpnCampaignTemplate = (Spinner) findViewById(R.id.spnCampaignTemplate);
         mEdtCampaignMsg = (TextInputEditText) findViewById(R.id.edtCampaignMsg);
         mRadioGroupRecurrence = (RadioGroup) findViewById(R.id.radioGroupRecurrence);
@@ -130,6 +217,7 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
         mEtdRecurrenceMonths = (TextInputEditText) findViewById(R.id.etdRecurrenceMonths);
         mRecurrenceWeeks = (LinearLayout) findViewById(R.id.RecurrenceWeeks);
         mWidget1 = (WeekdaysWidget) findViewById(R.id.widget1);
+        mLinearLayoutSetEndDate = (LinearLayout) findViewById(R.id.linearLayoutSetEndDate);
         mRadioGroupEndingDate = (RadioGroup) findViewById(R.id.radioGroupEndingDate);
         mRadioButtonNoEndDate = (RadioButton) findViewById(R.id.radioButtonNoEndDate);
         mRadioButtonSetEndDate = (RadioButton) findViewById(R.id.radioButtonSetEndDate);
@@ -197,6 +285,11 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
             showToast("Select Recurrence Type");
             bln = false;
         }
+        else if(mRadioGroupEndingDate.getCheckedRadioButtonId() == -1){
+            showToast("Select Ending Date Type");
+            bln = false;
+        }
+
         return bln;
     }
 
