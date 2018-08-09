@@ -1,6 +1,7 @@
 package com.bandhan.mantra.activities;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -67,6 +68,10 @@ public class DashboardActivity extends BaseActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        if(!isNetworkConnected()){
+            showToast("Check Internet Connection");
+            finish();
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -197,6 +202,75 @@ public class DashboardActivity extends BaseActivity implements NavigationView.On
         mTxtActiv4.setText(dashboardDetails.getActivityLogs().get(3).getEntityType()+" "+dashboardDetails.getActivityLogs().get(3).getEntityName()+" is "+dashboardDetails.getActivityLogs().get(3).getOperationType());
         mTxtActiv5.setText(dashboardDetails.getActivityLogs().get(4).getEntityType()+" "+dashboardDetails.getActivityLogs().get(4).getEntityName()+" is "+dashboardDetails.getActivityLogs().get(4).getOperationType());
 
+
+       /* for(int i=0;i<dashboardDetails.getMessageSentCounts().size();i++){
+
+            LinearLayout a = new LinearLayout(DashboardActivity.this);
+            a.setOrientation(LinearLayout.HORIZONTAL);
+
+            TextView txtMonth = new TextView(DashboardActivity.this);
+            txtMonth.setText(""+dashboardDetails.getMessageSentCounts().get(i).getDays());
+            a.addView(txtMonth);
+
+            TextView txtSMS = new TextView(DashboardActivity.this);
+            txtSMS.setText(""+dashboardDetails.getMessageSentCounts().get(i).getTotalCount());
+            a.addView(txtSMS);
+
+            TextView txtCoupon = new TextView(DashboardActivity.this);
+            txtCoupon.setText(""+dashboardDetails.getMessageSentCounts().get(i).getEcouponCampaignCount());
+            a.addView(txtCoupon);
+
+            TextView txtSales = new TextView(DashboardActivity.this);
+            txtSales.setText(""+dashboardDetails.getMessageSentCounts().get(i).getCampaignCount());
+            a.addView(txtSales);
+
+            TextView txtRewards = new TextView(DashboardActivity.this);
+            txtRewards.setText(""+dashboardDetails.getMessageSentCounts().get(i).getTotalCount());
+            a.addView(txtRewards);
+            mSimpleTableRow.addView(a);
+        }*/
+
+
+       int count = dashboardDetails.getMessageSentCounts().size();
+        for (int i=0;i<count;i++){
+
+            TableRow row= new TableRow(this);
+            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+            row.setLayoutParams(lp);
+
+            TextView txtMonth = new TextView(DashboardActivity.this);
+            txtMonth.setTypeface(null, Typeface.BOLD);
+            txtMonth.setTextAppearance(this,android.R.style.TextAppearance_Medium);
+            txtMonth.setText(""+dashboardDetails.getMessageSentCounts().get(i).getDays());
+
+
+            TextView txtSMS = new TextView(DashboardActivity.this);
+            txtSMS.setTextAppearance(this,android.R.style.TextAppearance_Medium);
+            txtSMS.setText(""+dashboardDetails.getMessageSentCounts().get(i).getCampaignCount());
+
+
+            TextView txtCoupon = new TextView(DashboardActivity.this);
+            txtCoupon.setTextAppearance(this,android.R.style.TextAppearance_Medium);
+            txtCoupon.setText(""+dashboardDetails.getMessageSentCounts().get(i).getEcouponCampaignCount());
+
+
+            TextView txtSales = new TextView(DashboardActivity.this);
+            txtSales.setTextAppearance(this,android.R.style.TextAppearance_Medium);
+            txtSales.setText(""+dashboardDetails.getMessageSentCounts().get(i).getTotalCount());
+
+
+            TextView txtRewards = new TextView(DashboardActivity.this);
+            txtRewards.setTextAppearance(this,android.R.style.TextAppearance_Medium);
+            txtRewards.setText(""+dashboardDetails.getMessageSentCounts().get(i).getTotalCount());
+
+
+            row.addView(txtMonth);
+            row.addView(txtSMS);
+            row.addView(txtCoupon);
+            row.addView(txtSales);
+            row.addView(txtRewards);
+            mSimpleTableLayout.addView(row,i);
+        }
 
     }
 

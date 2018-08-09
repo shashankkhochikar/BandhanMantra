@@ -44,6 +44,10 @@ public class RedeemCouponsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_redeem_coupons);
+        if(!isNetworkConnected()){
+            showToast("Check Internet Connection");
+            finish();
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sessionManager = new SessionManager(this);

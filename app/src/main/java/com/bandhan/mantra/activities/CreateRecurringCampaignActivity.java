@@ -93,6 +93,10 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recurring_campaign);
+        if(!isNetworkConnected()){
+            showToast("Check Internet Connection");
+            finish();
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         assignViews();
         widget = (WeekdaysWidget) findViewById(R.id.widget1);

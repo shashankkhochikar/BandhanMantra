@@ -23,6 +23,10 @@ public class NotificationsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+        if(!isNetworkConnected()){
+            showToast("Check Internet Connection");
+            finish();
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         assignViews();
         sessionManager = new SessionManager(this);

@@ -53,6 +53,10 @@ public class CouponCampaignsListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coupon_campaigns_list);
+        if(!isNetworkConnected()){
+            showToast("Check Internet Connection");
+            finish();
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         assignViews();
         sessionManager = new SessionManager(this);

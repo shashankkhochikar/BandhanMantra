@@ -48,6 +48,10 @@ public class CampaignsListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_campaigns_list);
+        if(!isNetworkConnected()){
+            showToast("Check Internet Connection");
+            finish();
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         CampaignListListView =(ListView)findViewById(R.id.CampaignListRecyclerView);

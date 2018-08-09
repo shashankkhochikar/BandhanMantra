@@ -304,6 +304,71 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textStyle="bold" />
 
+            <TableRow
+                android:id="@+id/simpleTableRow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/app_min_margin"
+                        android:layout_weight="1"
+                        android:text="Month"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/app_min_margin"
+                        android:layout_weight="1"
+                        android:text="SMS"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold"
+                        android:paddingLeft="@dimen/app_min_padding"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/app_min_margin"
+                        android:layout_weight="1"
+                        android:text="Coupon"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/app_min_margin"
+                        android:layout_weight="1"
+                        android:text="Sales"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/app_min_margin"
+                        android:layout_weight="1"
+                        android:text="Reward"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </TableRow>
+
             <TableLayout
                 android:id="@+id/simpleTableLayout"
                 xmlns:android="http://schemas.android.com/apk/res/android"
@@ -311,73 +376,12 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/app_normal_margin"
                 android:collapseColumns="*"
-                android:stretchColumns="*"> <!-- collapse the first column of the table row-->
+                android:stretchColumns="*"
+                android:layout_margin="@dimen/app_min_margin"> <!-- collapse the first column of the table row-->
 
 
                 <!-- first row of the table layout-->
-                <TableRow
-                    android:id="@+id/simpleTableRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:weightSum="5">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/app_min_margin"
-                            android:layout_weight="1"
-                            android:text="Month"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/app_min_margin"
-                            android:layout_weight="1"
-                            android:text="SMS"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/app_min_margin"
-                            android:layout_weight="1"
-                            android:text="Coupon"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/app_min_margin"
-                            android:layout_weight="1"
-                            android:text="Sales"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/app_min_margin"
-                            android:layout_weight="1"
-                            android:text="Reward"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                </TableRow>
             </TableLayout>
 
             <LinearLayout
@@ -386,7 +390,8 @@
                 android:layout_margin="@dimen/app_min_margin"
                 android:layout_weight="1"
                 android:background="#1c84c6"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"

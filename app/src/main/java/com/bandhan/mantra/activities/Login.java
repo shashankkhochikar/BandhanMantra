@@ -50,6 +50,10 @@ public class Login extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        if(!isNetworkConnected()){
+            showToast("Check Internet Connection");
+            finish();
+        }
         assignViews();
         sessionManager = new SessionManager(this);
         if(sessionManager.hasSessionCredentials()){

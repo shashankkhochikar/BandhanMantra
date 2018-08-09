@@ -62,6 +62,10 @@ public class ContactGroupsListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_groups_list);
+        if(!isNetworkConnected()){
+            showToast("Check Internet Connection");
+            finish();
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         gropuListListView = (ListView) findViewById(R.id.gropuListView);
         mSwiperefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);

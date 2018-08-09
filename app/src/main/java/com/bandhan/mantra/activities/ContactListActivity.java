@@ -52,6 +52,10 @@ public class ContactListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
+        if(!isNetworkConnected()){
+            showToast("Check Internet Connection");
+            finish();
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         contactListListView = (ListView) findViewById(R.id.ConactListRecyclerView);
         linearLayoutContactItem = (LinearLayout)findViewById(R.id.linearLayoutContactItem);
