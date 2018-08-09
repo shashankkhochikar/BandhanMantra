@@ -192,7 +192,7 @@ public class CreateCouponCampaignActivity extends BaseActivity {
                         new TimePickerDialog.OnTimeSetListener(){
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                mEdtScheduledTime.setText(hourOfDay + ":" + minute);
+                                mEdtScheduledTime.setText(convertTimeTo12hrs(hourOfDay,minute));//setText(hourOfDay + ":" + minute);
                             }
                         },mHour, mMinute, false);
                 timePickerDialog.show();
@@ -339,7 +339,7 @@ public class CreateCouponCampaignActivity extends BaseActivity {
         final Calendar c1 = Calendar.getInstance();
         int mHour = c1.get(Calendar.HOUR_OF_DAY);
         int mMinute = c1.get(Calendar.MINUTE);
-        String formattedTime = mHour+":"+mMinute;
+        String formattedTime = convertTimeTo12hrs(mHour,mMinute);//mHour+":"+mMinute;
 
         try {
             JSONObject values = new JSONObject();
@@ -375,10 +375,18 @@ public class CreateCouponCampaignActivity extends BaseActivity {
             values.put("ReedeemedCount",0);
             values.put("TotalCount",0);
             values.put("CreatedBy",clientId);
+
+            selectedGroup = GroupListjsonArray.getJSONObject(mSpnCampaignGroup.getSelectedItemPosition());
             values.put("GroupId",selectedGroup.getInt("Id"));
             values.put("Group",selectedGroup.getString("Name"));
+            if(selectedGroup.get("Name").equals("All Contacts")){
+                showToast("Please Select Group");
+                return null;
+            }
             values.put("GroupContactCount",selectedGroup.getInt("ContactCount"));
             values.put("ForAllContact",true);
+
+            selectedTemplate =TemplateListjsonArray.getJSONObject(mSpnCampaignTemplate.getSelectedItemPosition());
             values.put("TemplateDTO",selectedTemplate);
             values.put("MinPurchaseAmount",0);
             values.put("ConsumedCredits",0);

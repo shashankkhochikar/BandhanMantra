@@ -301,7 +301,7 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
         final Calendar c1 = Calendar.getInstance();
         int mHour = c1.get(Calendar.HOUR_OF_DAY);
         int mMinute = c1.get(Calendar.MINUTE);
-        String formattedTime = mHour+":"+mMinute;
+        String formattedTime = convertTimeTo12hrs(mHour,mMinute);//mHour+":"+mMinute;
 
         try {
             JSONObject values = new JSONObject();
@@ -441,12 +441,20 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
 
             values.put("ClientId",clientId);
             values.put("CreatedBy",clientId);
+
+            selectedGroup = GroupListjsonArray.getJSONObject(mSpnCampaignGroup.getSelectedItemPosition());
             values.put("GroupId",selectedGroup.get("Id"));
+            if(selectedGroup.get("Name").equals("All Contacts")){
+                showToast("Please Select Group");
+                return null;
+            }
             values.put("GroupName",""+selectedGroup.get("Name"));
             values.put("GroupContactCount",""+selectedGroup.get("ContactCount"));
             values.put("IsActive",true);
             values.put("ForAllContact",true);
             values.put("LastCampaignId","");
+
+            selectedTemplate =TemplateListjsonArray.getJSONObject(mSpnCampaignTemplate.getSelectedItemPosition());
             values.put("TemplateDTO",selectedTemplate);
 
             return values;

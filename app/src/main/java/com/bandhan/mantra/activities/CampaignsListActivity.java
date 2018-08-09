@@ -2,6 +2,7 @@ package com.bandhan.mantra.activities;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,7 @@ import java.util.Map;
 public class CampaignsListActivity extends BaseActivity {
 
     private ListView CampaignListListView;
+    private SwipeRefreshLayout mSwiperefresh;
     private SessionManager sessionManager;
     public UserData userData;
     public int clientId = 0;
@@ -49,6 +51,7 @@ public class CampaignsListActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         CampaignListListView =(ListView)findViewById(R.id.CampaignListRecyclerView);
+        mSwiperefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
 
         sessionManager = new SessionManager(this);
         userData = sessionManager.getLoggedUserData();
@@ -65,7 +68,13 @@ public class CampaignsListActivity extends BaseActivity {
                 startActivity(editContactintent);
             }
         };
-
+        mSwiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwiperefresh.setRefreshing(true);
+                getCampaignsListByClientID(clientId);
+            }
+        });
     }
 
     private void getCampaignsListByClientID(final int clientId) {
@@ -97,12 +106,14 @@ public class CampaignsListActivity extends BaseActivity {
                             {
                                 campaignListAdapter = new CampaignListAdapter(CampaignsListActivity.this,response.getData(),onButtonActionListener);
                                 CampaignListListView.setAdapter(campaignListAdapter);
+                                mSwiperefresh.setRefreshing(false);
                             }
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     hideBusyProgress();
+                    mSwiperefresh.setRefreshing(false);
                     Log.v(ContactListActivity.class.getName(), VolleySingleton.getErrorMessage(error).toString());
                     NetworkResponse response = error.networkResponse;
                     if (error instanceof ServerError && response != null) {
@@ -134,6 +145,7 @@ public class CampaignsListActivity extends BaseActivity {
             VolleySingleton.getInstance().addToRequestQueue(getGroupContactsByClientIDRequest);
         } catch (Exception e) {
             hideBusyProgress();
+            mSwiperefresh.setRefreshing(false);
             Log.v(ContactListActivity.class.getName(), e.getMessage().toString());
             showToast("Something went wrong. Please try again later.");
         }

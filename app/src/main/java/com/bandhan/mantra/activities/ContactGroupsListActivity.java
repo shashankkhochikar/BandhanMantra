@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +50,7 @@ import java.util.Map;
 public class ContactGroupsListActivity extends BaseActivity {
 
     private ListView gropuListListView;
+    private SwipeRefreshLayout mSwiperefresh;
     private SessionManager sessionManager;
     public UserData userData;
     private ContactGropusListAdapter contactGropusListAdapter;
@@ -62,6 +64,7 @@ public class ContactGroupsListActivity extends BaseActivity {
         setContentView(R.layout.activity_contact_groups_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         gropuListListView = (ListView) findViewById(R.id.gropuListView);
+        mSwiperefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         sessionManager = new SessionManager(this);
         userData = sessionManager.getLoggedUserData();
         clientId = userData.getId();
@@ -87,6 +90,13 @@ public class ContactGroupsListActivity extends BaseActivity {
                 startActivity(ContactListActivity);
             }
         };
+        mSwiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwiperefresh.setRefreshing(true);
+                getGroupListByClientId(clientId);
+            }
+        });
     }
 
     private void getGroupListByClientId(Integer clientId) {
@@ -117,6 +127,7 @@ public class ContactGroupsListActivity extends BaseActivity {
                         }
                         contactGropusListAdapter = new ContactGropusListAdapter(ContactGroupsListActivity.this, groupList,onButtonActionListener);
                         gropuListListView.setAdapter(contactGropusListAdapter);
+                        mSwiperefresh.setRefreshing(false);
 
                     } else {
                         showToast("Invalid Response");
@@ -127,6 +138,7 @@ public class ContactGroupsListActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError e) {
                     e.printStackTrace();
                     hideBusyProgress();
+                    mSwiperefresh.setRefreshing(false);
                     Log.v(ContactListActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
                     //showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
                 }
@@ -134,6 +146,7 @@ public class ContactGroupsListActivity extends BaseActivity {
             VolleySingleton.getInstance().addToRequestQueue(userResetPasswordRequest);
         } catch (Exception e) {
             hideBusyProgress();
+            mSwiperefresh.setRefreshing(false);
             Log.v(ContactListActivity.class.getName(), "Exception" + e.getMessage().toString());
             showToast("Exception " + e.getMessage().toString());
         }

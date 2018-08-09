@@ -2,6 +2,7 @@ package com.bandhan.mantra.activities;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +41,7 @@ import java.util.Map;
 public class CouponCampaignsListActivity extends BaseActivity {
 
     private ListView mCouponCampaignsListRecyclerView;
+    private SwipeRefreshLayout mSwiperefresh;
     private SessionManager sessionManager;
     public UserData userData;
     public int clientId = 0;
@@ -67,6 +69,13 @@ public class CouponCampaignsListActivity extends BaseActivity {
                 startActivity(editCouponCampaignActivity);
             }
         };
+        mSwiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwiperefresh.setRefreshing(true);
+                GetEcouponCampaignListByClientId(clientId);
+            }
+        });
 
     }
 
@@ -98,6 +107,7 @@ public class CouponCampaignsListActivity extends BaseActivity {
                         }
                         couponCampaignListAdapter = new CouponCampaignListAdapter(CouponCampaignsListActivity.this, couponList,onButtonActionListener);
                         mCouponCampaignsListRecyclerView.setAdapter(couponCampaignListAdapter);
+                        mSwiperefresh.setRefreshing(false);
 
                     } else {
                         showToast("Invalid Response");
@@ -108,6 +118,7 @@ public class CouponCampaignsListActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError e) {
                     e.printStackTrace();
                     hideBusyProgress();
+                    mSwiperefresh.setRefreshing(false);
                     Log.v(CouponCampaignsListActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
                     //showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
                 }
@@ -115,6 +126,7 @@ public class CouponCampaignsListActivity extends BaseActivity {
             VolleySingleton.getInstance().addToRequestQueue(userResetPasswordRequest);
         } catch (Exception e) {
             hideBusyProgress();
+            mSwiperefresh.setRefreshing(false);
             Log.v(CouponCampaignsListActivity.class.getName(), "Exception" + e.getMessage().toString());
             showToast("Exception " + e.getMessage().toString());
         }
@@ -122,6 +134,7 @@ public class CouponCampaignsListActivity extends BaseActivity {
 
     private void assignViews() {
         mCouponCampaignsListRecyclerView = (ListView) findViewById(R.id.CouponCampaignsListRecyclerView);
+        mSwiperefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
     }
 
     @Override

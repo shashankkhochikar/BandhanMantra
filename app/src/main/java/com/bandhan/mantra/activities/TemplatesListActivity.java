@@ -2,6 +2,7 @@ package com.bandhan.mantra.activities;
 
 import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ import java.util.Map;
 public class TemplatesListActivity extends BaseActivity {
 
     private ListView mTemplatesRecyclerView;
+    private SwipeRefreshLayout mSwiperefresh;
     private SessionManager sessionManager;
     public UserData userData;
     public int clientId = 0;
@@ -66,6 +68,13 @@ public class TemplatesListActivity extends BaseActivity {
                 showEditTemplateDialog(templateItem);
             }
         };
+        mSwiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwiperefresh.setRefreshing(true);
+                GetTemplateListByClientId(clientId);
+            }
+        });
 
     }
 
@@ -97,6 +106,7 @@ public class TemplatesListActivity extends BaseActivity {
                         }
                         templateListAdapter = new TemplateListAdapter(TemplatesListActivity.this, templateList,onButtonActionListener);
                         mTemplatesRecyclerView.setAdapter(templateListAdapter);
+                        mSwiperefresh.setRefreshing(false);
 
                     } else {
                         showToast("Invalid Response");
@@ -107,6 +117,7 @@ public class TemplatesListActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError e) {
                     e.printStackTrace();
                     hideBusyProgress();
+                    mSwiperefresh.setRefreshing(false);
                     Log.v(ContactListActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
                     //showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
                 }
@@ -114,6 +125,7 @@ public class TemplatesListActivity extends BaseActivity {
             VolleySingleton.getInstance().addToRequestQueue(GetTemplateListByClientIdRequest);
         } catch (Exception e) {
             hideBusyProgress();
+            mSwiperefresh.setRefreshing(false);
             Log.v(ContactListActivity.class.getName(), "Exception" + e.getMessage().toString());
             showToast("Exception " + e.getMessage().toString());
         }
@@ -175,6 +187,7 @@ public class TemplatesListActivity extends BaseActivity {
 
     private void assignViews() {
         mTemplatesRecyclerView = (ListView) findViewById(R.id.TemplatesListView);
+        mSwiperefresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
     }
 
     private void showCreateTemplateDialog() {

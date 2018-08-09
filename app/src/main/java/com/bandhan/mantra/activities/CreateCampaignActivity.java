@@ -395,6 +395,10 @@ public class CreateCampaignActivity extends BaseActivity {
         mEdtScheduledTime.setText(campaignsListItem.getScheduledTime());
         mEdtCampaignRemark.setText(campaignsListItem.getRemark());
         mEdtCampaignMsg.setText(campaignsListItem.getMessage());
+        /*if (campaignsListItem.getGroupName() != null) {
+            int spinnerPosition = GroupListArrayAdapter.getPosition(campaignsListItem.getGroupName());
+            mSpnCampaignGroup.setSelection(spinnerPosition);
+        }*/
 
        /* int spinnerPosition = GroupListArrayAdapter.getPosition(campaignsListItem.getGroupName());
         mSpnCampaignGroup.setSelection(spinnerPosition);
@@ -469,7 +473,7 @@ public class CreateCampaignActivity extends BaseActivity {
                 final Calendar c1 = Calendar.getInstance();
                 int mHour = c1.get(Calendar.HOUR_OF_DAY);
                 int mMinute = c1.get(Calendar.MINUTE);
-                String formattedTime = mHour+":"+mMinute;
+                String formattedTime = convertTimeTo12hrs(mHour,mMinute);//mHour+":"+mMinute;
                 values.put("IsScheduled",false);
                 values.put("ScheduledDate",formattedDate);
                 values.put("ScheduledTime",formattedTime);
@@ -481,9 +485,17 @@ public class CreateCampaignActivity extends BaseActivity {
             values.put("Remark",""+mEdtCampaignRemark.getText().toString());
             values.put("ClientId",clientId);
             values.put("CreatedBy",clientId);
+
+            selectedGroup = GroupListjsonArray.getJSONObject(mSpnCampaignGroup.getSelectedItemPosition());
             values.put("GroupId",selectedGroup.get("Id"));
+            if(selectedGroup.get("Name").equals("All Contacts")){
+                showToast("Please Select Group");
+                return null;
+            }
             values.put("GroupName",""+selectedGroup.get("Name"));
             values.put("IsUnicode",false);
+
+            selectedLanguageId = languagesId[mSpnCampaignLanguage.getSelectedItemPosition()];
             values.put("LanguageCode",""+selectedLanguageId);
             values.put("GroupContactCount",1);
             values.put("ForAllContact",false);
@@ -492,6 +504,8 @@ public class CreateCampaignActivity extends BaseActivity {
             values.put("IsReconcile",false);
             values.put("ReconcileDate",""+formattedDate);
             values.put("RecurringCampaignId","");
+
+            selectedTemplate =TemplateListjsonArray.getJSONObject(mSpnCampaignTemplate.getSelectedItemPosition());
             values.put("TemplateDTO",selectedTemplate);
 
             return values;
