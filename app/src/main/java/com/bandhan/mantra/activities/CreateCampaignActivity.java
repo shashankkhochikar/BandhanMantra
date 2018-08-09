@@ -161,7 +161,7 @@ public class CreateCampaignActivity extends BaseActivity {
                         new TimePickerDialog.OnTimeSetListener(){
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                mEdtScheduledTime.setText(hourOfDay + ":" + minute);
+                                mEdtScheduledTime.setText(convertTimeTo12hrs(hourOfDay,minute));//setText(hourOfDay + ":" + minute);
                             }
                         },mHour, mMinute, false);
                 timePickerDialog.show();
@@ -227,8 +227,6 @@ public class CreateCampaignActivity extends BaseActivity {
             }
         });
     }
-
-
 
     private boolean validate() {
         boolean bln = true;
