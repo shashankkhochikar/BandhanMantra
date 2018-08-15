@@ -32,12 +32,14 @@
             android:visibility="gone">
 
             <Button
+                android:id="@+id/btnRemoveFromGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="remove" />
 
             <Button
+                android:id="@+id/btnAddToGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

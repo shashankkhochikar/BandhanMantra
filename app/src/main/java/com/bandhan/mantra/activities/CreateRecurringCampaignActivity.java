@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,9 +17,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.bandhan.mantra.R;
 import com.bandhan.mantra.baseclasses.BaseActivity;
@@ -33,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -193,9 +197,56 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
                 mEtdSetEndDate.setText(simpleDateFormat.format(calendar.getTime()));
             }
         });
+        mBtnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isEdit){
+                    if(validate()){
+                        //showToast(""+getValues(contactData,clientId));
+                        //updateCampaign(getValues(campaignsListItem,clientId),campaignsListItem);
+                    }
+                }else if(!isEdit){
+                    /*if(validate()){
+                        //showToast(""+getValues(contactData,clientId));
+                        createRecurringCampaign(getValues(item,clientId));
+                    }*/
+                    createRecurringCampaign(getValues(item,clientId));
+                }
+            }
+        });
+        mSpnCampaignGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    selectedGroup = GroupListjsonArray.getJSONObject(position);//parent.getItemAtPosition(position).toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    showToast(e.getMessage().toString());
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        mSpnCampaignTemplate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    selectedTemplate =TemplateListjsonArray.getJSONObject(position);//parent.getItemAtPosition(position).toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    showToast(e.getMessage().toString());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
-
 
     private void assignViews() {
         mContainer = (LinearLayout) findViewById(R.id.container);
@@ -273,10 +324,6 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
             showToast("Select Group");
             // getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.password_blank), true, null).show();
             bln = false;
-        }else if (selectedLanguageId.equals("")) {
-            showToast("Select Language");
-            // getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.password_blank), true, null).show();
-            bln = false;
         }else if (selectedTemplate.equals("")) {
             showToast("Select Template");
             // getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.password_blank), true, null).show();
@@ -320,11 +367,11 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
             values.put("StartDate",formattedDate);
             values.put("StartTime",formattedTime);
             if(mRadioButtonSetEndDate.isChecked()) {
-                values.put("IsEndDate",0);
+                values.put("IsEndDate",true);
                 values.put("EndDate", mEtdSetEndDate.getText().toString());
                 values.put("EndTime", formattedTime);
             }else if(mRadioButtonNoEndDate.isChecked()){
-                values.put("IsEndDate",0);
+                values.put("IsEndDate",false);
                 values.put("EndDate", formattedDate);
                 values.put("EndTime", formattedTime);
             }
@@ -344,21 +391,60 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
             values.put("CreatedDate",formattedDate);
             values.put("SendDate",formattedTime);
 
-            values.put("IsBirthday",0);
-            values.put("IsAnniversary",0);
+            values.put("IsBirthday",false);
+            values.put("IsAnniversary",false);
             values.put("GenderType","None");
-            values.put("IsRecurring",0);
+            values.put("IsRecurring",false);
             if(mRadioButtonDaily.isChecked()){
                 values.put("IsDay",true);
                 values.put("DayValue",mEtdRecurrenceDays.getText());
+
+                values.put("IsMonth",false);
+                values.put("IsWeek",false);
+
+                values.put("Sunday",false);
+                values.put("Monday",false);
+                values.put("Tuesday",false);
+                values.put("Wednesday",false);
+                values.put("Thursday",false);
+                values.put("Friday",false);
+                values.put("Saturday",false);
+
+                values.put("MonthValue",0);
+                values.put("MonthDayValue",0);
+                //values.put("WeekValue","");
+
             }else if(mRadioButtonMonthly.isChecked()){
                 values.put("IsMonth",true);
                 values.put("MonthValue",mEtdRecurrenceMonths.getText().toString());
                 values.put("MonthDayValue",0);
 
+                values.put("IsDay",false);
+                values.put("IsWeek",false);
+
+                values.put("Sunday",false);
+                values.put("Monday",false);
+                values.put("Tuesday",false);
+                values.put("Wednesday",false);
+                values.put("Thursday",false);
+                values.put("Friday",false);
+                values.put("Saturday",false);
+
+                values.put("MonthValue",0);
+                values.put("MonthDayValue",0);
+                values.put("DayValue",0);
+                //values.put("WeekValue","");
+
             }else if(mRadioButtonWeekly.isChecked()){
                 values.put("IsWeek",true);
-                values.put("WeekValue","");
+                values.put("IsDay",false);
+                values.put("IsMonth",false);
+
+                values.put("MonthValue",0);
+                values.put("MonthDayValue",0);
+                values.put("DayValue",0);
+
+                //values.put("WeekValue","");
                 for(int i=0;i<widget.getSelectedDays().size();i++)
                 {
                     int dayNumber = widget.getSelectedDays().get(i);
@@ -453,7 +539,7 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
                 return null;
             }
             values.put("GroupName",""+selectedGroup.get("Name"));
-            values.put("GroupContactCount",""+selectedGroup.get("ContactCount"));
+            values.put("GroupContactCount",selectedGroup.get("ContactCount"));
             values.put("IsActive",true);
             values.put("ForAllContact",true);
             values.put("LastCampaignId","");
@@ -569,6 +655,60 @@ public class CreateRecurringCampaignActivity extends BaseActivity {
             showToast("Exception " + e.getMessage().toString());
         }
     }
+
+    private void createRecurringCampaign(JSONObject jsonObject){
+        try {
+            showBusyProgress();
+            JSONObject params = jsonObject;
+
+            final String requestBody = params.toString();
+            Log.v(CreateRecurringCampaignActivity.class.getName(),"RecurringCampaign\n"+requestBody);
+
+            StringRequest createRecurringCampaignRequest = new StringRequest(Request.Method.POST, VolleySingleton.getWsBaseUrl() + "RecurringCampaign/CreateRecurringCampaign?accessId="+accessId, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String Response) {
+                    hideBusyProgress();
+                    Log.v(CreateRecurringCampaignActivity.class.getName(), "onResponse :" + Response.toString());
+                    if (!Response.equals("")) {
+                        //getGroupListByClientId(clientId);
+                        showToast("Ok");
+                        finish();
+                    } else {
+                        showToast("Invalid Response");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError e) {
+                    e.printStackTrace();
+                    hideBusyProgress();
+                    Log.v(CreateRecurringCampaignActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
+                    showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            VolleySingleton.getInstance().addToRequestQueue(createRecurringCampaignRequest);
+        } catch (Exception e) {
+            hideBusyProgress();
+            Log.v(CreateRecurringCampaignActivity.class.getName(), "Exception" + e.getMessage().toString());
+            showToast("Exception " + e.getMessage().toString());
+        }
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

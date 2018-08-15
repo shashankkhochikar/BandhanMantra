@@ -73,11 +73,11 @@ public class CreateCouponCampaignActivity extends BaseActivity {
     private JSONArray TemplateListjsonArray;
     private JSONArray GroupListjsonArray;
 
-    private int clientId=0;
+    private int clientId = 0;
     private boolean isEdit = false;
     private SimpleDateFormat simpleDateFormat;
     private CouponCampaign couponCampaign;
-    private SpinnerDatePickerDialogBuilder ScheduledDatePickerDialogBuilder,ExpiryDatePickerDialogBuilder;
+    private SpinnerDatePickerDialogBuilder ScheduledDatePickerDialogBuilder, ExpiryDatePickerDialogBuilder;
     private JSONObject selectedGroup;
     private JSONObject selectedTemplate;
     private String selectedLanguageId;
@@ -89,7 +89,7 @@ public class CreateCouponCampaignActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_coupon_campaign);
-        if(!isNetworkConnected()){
+        if (!isNetworkConnected()) {
             showToast("Check Internet Connection");
             finish();
         }
@@ -100,35 +100,36 @@ public class CreateCouponCampaignActivity extends BaseActivity {
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         Bundle extras = getIntent().getExtras();
         isEdit = extras.getBoolean("isEdit");
-        if(isEdit){
-            clientId=extras.getInt("clientId");
+        if (isEdit) {
+            clientId = extras.getInt("clientId");
             couponCampaign = (CouponCampaign) getIntent().getSerializableExtra("couponData");
             setValues(couponCampaign);
-            for (int i = 0; i < mContainer.getChildCount();  i++ ){
+            for (int i = 0; i < mContainer.getChildCount(); i++) {
                 View view = mContainer.getChildAt(i);
                 view.setEnabled(false); // Or whatever you want to do with the view.
             }
-        }else if(!isEdit){
-            clientId=extras.getInt("clientId");
+        } else if (!isEdit) {
+            clientId = extras.getInt("clientId");
             clearData();
         }
         setGroupListSpinner(clientId);
         setTemplateListSpinner(clientId);
         setListners();
     }
+
     private void setListners() {
         mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isEdit){
-                    if(validate()){
+                if (isEdit) {
+                    if (validate()) {
                         //showToast(""+getValues(contactData,clientId));
                         //updateCampaign(getValues(campaignsListItem,clientId),campaignsListItem);
                     }
-                }else if(!isEdit){
-                    if(validate()){
+                } else if (!isEdit) {
+                    if (validate()) {
                         //showToast(""+getValues(contactData,clientId));
-                        createCouponCampaign(getValues(couponCampaign,clientId),clientId);
+                        createCouponCampaign(getValues(couponCampaign, clientId), clientId);
                     }
                 }
             }
@@ -140,11 +141,11 @@ public class CreateCouponCampaignActivity extends BaseActivity {
                 RadioButton rb = (RadioButton) group.findViewById(checkedId);
 
                 if (null != rb && checkedId > -1) {
-                    if(mRadioButtonNow.isChecked()){
+                    if (mRadioButtonNow.isChecked()) {
                         linearLayoutScheduleDateTime.setVisibility(View.GONE);
 
                     }
-                    if(mRadioButtonLater.isChecked()){
+                    if (mRadioButtonLater.isChecked()) {
                         linearLayoutScheduleDateTime.setVisibility(View.VISIBLE);
                     }
                 }
@@ -193,12 +194,12 @@ public class CreateCouponCampaignActivity extends BaseActivity {
                 int mMinute = c.get(Calendar.MINUTE);
 
                 TimePickerDialog timePickerDialog = new TimePickerDialog(CreateCouponCampaignActivity.this,
-                        new TimePickerDialog.OnTimeSetListener(){
+                        new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                mEdtScheduledTime.setText(convertTimeTo12hrs(hourOfDay,minute));//setText(hourOfDay + ":" + minute);
+                                mEdtScheduledTime.setText(convertTimeTo12hrs(hourOfDay, minute));//setText(hourOfDay + ":" + minute);
                             }
-                        },mHour, mMinute, false);
+                        }, mHour, mMinute, false);
                 timePickerDialog.show();
             }
         });
@@ -222,7 +223,7 @@ public class CreateCouponCampaignActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    selectedTemplate =TemplateListjsonArray.getJSONObject(position);//parent.getItemAtPosition(position).toString();
+                    selectedTemplate = TemplateListjsonArray.getJSONObject(position);//parent.getItemAtPosition(position).toString();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     showToast(e.getMessage().toString());
@@ -285,7 +286,7 @@ public class CreateCouponCampaignActivity extends BaseActivity {
             //mEdtMinPurchaseAmt.setHint("Set Mobile No");
             // getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.password_blank), true, null).show();
             bln = false;
-        }else if (ExpiryAfter.length() == 0) {
+        } else if (ExpiryAfter.length() == 0) {
             //mEdtExpiryAfter.setHint("Set Email");
             mEdtExpiryAfter.setBackgroundResource(R.drawable.red_border);
             //getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.username_blank), true, null).show();
@@ -295,17 +296,17 @@ public class CreateCouponCampaignActivity extends BaseActivity {
             mEdtExpiryDate.setBackgroundResource(R.drawable.red_border);
 //            getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.invalid_email), true, null).show();
             bln = false;
-        }else if (CampaignRemark.length() == 0) {
+        } else if (CampaignRemark.length() == 0) {
             //mEdtBdate.setHint("Set Birth Date");
             mEdtCampaignRemark.setBackgroundResource(R.drawable.red_border);
             //getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.username_blank), true, null).show();
             bln = false;
-        }else if (ScheduledTime.length() == 0) {
+        } else if (ScheduledTime.length() == 0) {
             //mEdtAniversary.setHint("Set Aniversary Date");
             mEdtScheduledTime.setBackgroundResource(R.drawable.red_border);
             //getAlertDialogManager().Dialog(getResources().getString(R.string.error), getResources().getString(R.string.username_blank), true, null).show();
             bln = false;
-        }else if(mRadioGroup.getCheckedRadioButtonId() == -1){
+        } else if (mRadioGroup.getCheckedRadioButtonId() == -1) {
             showToast("Select Schedule Type");
             bln = false;
         }
@@ -332,10 +333,10 @@ public class CreateCouponCampaignActivity extends BaseActivity {
         mEdtScheduledTime = (TextInputEditText) findViewById(R.id.edtScheduledTime);
         mEdtCampaignRemark = (TextInputEditText) findViewById(R.id.edtCampaignRemark);
         mBtnSubmit = (Button) findViewById(R.id.btnSubmit);
-        linearLayoutScheduleDateTime = (LinearLayout)findViewById(R.id.linearLayoutScheduleDateTime);
+        linearLayoutScheduleDateTime = (LinearLayout) findViewById(R.id.linearLayoutScheduleDateTime);
     }
 
-    private JSONObject getValues(CouponCampaign couponCampaign, int clientId){
+    private JSONObject getValues(CouponCampaign couponCampaign, int clientId) {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         String formattedDate = df.format(c);
@@ -343,85 +344,85 @@ public class CreateCouponCampaignActivity extends BaseActivity {
         final Calendar c1 = Calendar.getInstance();
         int mHour = c1.get(Calendar.HOUR_OF_DAY);
         int mMinute = c1.get(Calendar.MINUTE);
-        String formattedTime = convertTimeTo12hrs(mHour,mMinute);//mHour+":"+mMinute;
+        String formattedTime = convertTimeTo12hrs(mHour, mMinute);//mHour+":"+mMinute;
 
         try {
             JSONObject values = new JSONObject();
-            if(isEdit){
-                values.put("Id",couponCampaign.getId());
-                values.put("ReceipentNumber",couponCampaign.getRecipientsCount());
-            }else if(!isEdit){
-                values.put("Id",0);
-                values.put("ReceipentNumber","0");
+            if (isEdit) {
+                values.put("Id", couponCampaign.getId());
+                values.put("ReceipentNumber", couponCampaign.getRecipientsCount());
+            } else if (!isEdit) {
+                values.put("Id", 0);
+                values.put("ReceipentNumber", "0");
 
             }
-            values.put("Title",mEtdcouponName.getText().toString());
-            values.put("CreatedDate",formattedDate);
+            values.put("Title", mEtdcouponName.getText().toString());
+            values.put("CreatedDate", formattedDate);
 
-            values.put("RecipientsCount",0);
-            values.put("Message",mEdtCampaignMsg.getText().toString());
-            values.put("ExpiresOn",mEdtExpiryDate.getText().toString());
-            values.put("SendOn",formattedDate);
+            values.put("RecipientsCount", 0);
+            values.put("Message", mEdtCampaignMsg.getText().toString());
+            values.put("ExpiresOn", mEdtExpiryDate.getText().toString());
+            values.put("SendOn", formattedDate);
             //values.put("ScheduleTime",mEdtScheduledDate.getText().toString());
-            values.put("IsScheduled",0);
-            if(mRadioButtonLater.isChecked()){
-                values.put("IsScheduled",true);
-                values.put("ScheduleTime",""+mEdtScheduledTime.getText().toString());
-            }else if(mRadioButtonNow.isChecked()){
-                values.put("IsScheduled",false);
-                values.put("ScheduleTime",formattedTime);
+            values.put("IsScheduled", 0);
+            if (mRadioButtonLater.isChecked()) {
+                values.put("IsScheduled", true);
+                values.put("ScheduleTime", "" + mEdtScheduledTime.getText().toString());
+            } else if (mRadioButtonNow.isChecked()) {
+                values.put("IsScheduled", false);
+                values.put("ScheduleTime", formattedTime);
             }
 
-            values.put("Status","unsend");
-            values.put("Remark",mEdtCampaignRemark.getText().toString());
-            values.put("IPAddress","");
-            values.put("ClientId",clientId);
-            values.put("ReedeemedCount",0);
-            values.put("TotalCount",0);
-            values.put("CreatedBy",clientId);
+            values.put("Status", "unsend");
+            values.put("Remark", mEdtCampaignRemark.getText().toString());
+            values.put("IPAddress", "");
+            values.put("ClientId", clientId);
+            values.put("ReedeemedCount", 0);
+            values.put("TotalCount", 0);
+            values.put("CreatedBy", clientId);
 
             selectedGroup = GroupListjsonArray.getJSONObject(mSpnCampaignGroup.getSelectedItemPosition());
-            values.put("GroupId",selectedGroup.getInt("Id"));
-            values.put("Group",selectedGroup.getString("Name"));
-            if(selectedGroup.get("Name").equals("All Contacts")){
+            values.put("GroupId", selectedGroup.getInt("Id"));
+            values.put("Group", selectedGroup.getString("Name"));
+            if (selectedGroup.get("Name").equals("All Contacts")) {
                 showToast("Please Select Group");
                 return null;
             }
-            values.put("GroupContactCount",selectedGroup.getInt("ContactCount"));
-            values.put("ForAllContact",true);
+            values.put("GroupContactCount", selectedGroup.getInt("ContactCount"));
+            values.put("ForAllContact", true);
 
-            selectedTemplate =TemplateListjsonArray.getJSONObject(mSpnCampaignTemplate.getSelectedItemPosition());
-            values.put("TemplateDTO",selectedTemplate);
-            values.put("MinPurchaseAmount",0);
-            values.put("ConsumedCredits",0);
-            values.put("CreditsDiffrence",0);
-            values.put("IsReconcile",true);
-            values.put("ReconcileDate",formattedDate);
-            values.put("RequiredCredits",0);
-            values.put("RecurringCampaignId",0);
-            values.put("SuccessCount",0);
-            values.put("FailureCount",0);
-            values.put("PendingCount",0);
-            values.put("UpdatedDate",formattedDate);
-            values.put("UserName",userData.getFirstName()+" "+userData.getLastName());
+            selectedTemplate = TemplateListjsonArray.getJSONObject(mSpnCampaignTemplate.getSelectedItemPosition());
+            values.put("TemplateDTO", selectedTemplate);
+            values.put("MinPurchaseAmount", 0);
+            values.put("ConsumedCredits", 0);
+            values.put("CreditsDiffrence", 0);
+            values.put("IsReconcile", true);
+            values.put("ReconcileDate", formattedDate);
+            values.put("RequiredCredits", 0);
+            values.put("RecurringCampaignId", 0);
+            values.put("SuccessCount", 0);
+            values.put("FailureCount", 0);
+            values.put("PendingCount", 0);
+            values.put("UpdatedDate", formattedDate);
+            values.put("UserName", userData.getFirstName() + " " + userData.getLastName());
 
             return values;
-        }catch (JSONException ex){
-            showToast("getValues JSONException\n"+ex.getMessage().toString());
+        } catch (JSONException ex) {
+            showToast("getValues JSONException\n" + ex.getMessage().toString());
             return null;
         }
 
     }
 
-    private void createCouponCampaign(JSONObject jsonObject,int clientId){
+    private void createCouponCampaign(JSONObject jsonObject, int clientId) {
         try {
             showBusyProgress();
             JSONObject params = jsonObject;
 
             final String requestBody = params.toString();
-            Log.v(CreateCouponCampaignActivity.class.getName(),"createCouponCampaign\n"+requestBody);
+            Log.v(CreateCouponCampaignActivity.class.getName(), "createCouponCampaign\n" + requestBody);
 
-            StringRequest createCouponCampaignRequest = new StringRequest(Request.Method.POST, VolleySingleton.getWsBaseUrl() + "EcouponCampaign/CreateEcouponCampaign?accessId="+accessId, new Response.Listener<String>() {
+            StringRequest createCouponCampaignRequest = new StringRequest(Request.Method.POST, VolleySingleton.getWsBaseUrl() + "EcouponCampaign/CreateEcouponCampaign?accessId=" + accessId, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String Response) {
                     hideBusyProgress();
@@ -470,10 +471,10 @@ public class CreateCouponCampaignActivity extends BaseActivity {
         try {
             showBusyProgress();
             Map<String, String> params = new HashMap<String, String>();
-            params.put("accessId",accessId);
-            params.put("ClientId",""+clientId);
-            String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Template/GetTemplateListByClientId",params);
-            Log.v(CreateCouponCampaignActivity.class.getName(), "Req : "+urlWithParams);
+            params.put("accessId", accessId);
+            params.put("ClientId", "" + clientId);
+            String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Template/GetTemplateListByClientId", params);
+            Log.v(CreateCouponCampaignActivity.class.getName(), "Req : " + urlWithParams);
 
             StringRequest GetTemplateListByClientIdRequest = new StringRequest(Request.Method.GET, urlWithParams, new Response.Listener<String>() {
                 @Override
@@ -484,11 +485,11 @@ public class CreateCouponCampaignActivity extends BaseActivity {
                         try {
                             TemplateListjsonArray = new JSONArray(Response);
                             String[] group = new String[TemplateListjsonArray.length()];
-                            for(int i=0;i<TemplateListjsonArray.length();i++){
+                            for (int i = 0; i < TemplateListjsonArray.length(); i++) {
                                 JSONObject jsonObject = (JSONObject) TemplateListjsonArray.getJSONObject(i);
-                                group[i]=jsonObject.get("Message").toString();
+                                group[i] = jsonObject.get("Message").toString();
                             }
-                            TemplateListArrayAdapter = new ArrayAdapter(CreateCouponCampaignActivity.this,android.R.layout.simple_spinner_item,group);
+                            TemplateListArrayAdapter = new ArrayAdapter(CreateCouponCampaignActivity.this, android.R.layout.simple_spinner_item, group);
                             TemplateListArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             //Setting the ArrayAdapter data on the Spinner
                             mSpnCampaignTemplate.setAdapter(TemplateListArrayAdapter);
@@ -520,10 +521,10 @@ public class CreateCouponCampaignActivity extends BaseActivity {
         try {
             showBusyProgress();
             Map<String, String> params = new HashMap<String, String>();
-            params.put("accessId",accessId);
-            params.put("ClientId",""+clientId);
-            String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Group/GetGroupListByClientIdForCampaign",params);
-            Log.v(CreateCouponCampaignActivity.class.getName(), "Req : "+urlWithParams);
+            params.put("accessId", accessId);
+            params.put("ClientId", "" + clientId);
+            String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Group/GetGroupListByClientIdForCampaign", params);
+            Log.v(CreateCouponCampaignActivity.class.getName(), "Req : " + urlWithParams);
 
             StringRequest GetGroupListByClientIdForCampaignRequest = new StringRequest(Request.Method.GET, urlWithParams, new Response.Listener<String>() {
                 @Override
@@ -534,12 +535,12 @@ public class CreateCouponCampaignActivity extends BaseActivity {
                         try {
                             GroupListjsonArray = new JSONArray(Response);
                             String[] group = new String[GroupListjsonArray.length()];
-                            for(int i=0;i<GroupListjsonArray.length();i++){
+                            for (int i = 0; i < GroupListjsonArray.length(); i++) {
                                 JSONObject jsonObject = (JSONObject) GroupListjsonArray.getJSONObject(i);
-                                group[i]=jsonObject.get("Name").toString();
+                                group[i] = jsonObject.get("Name").toString();
                             }
 
-                            GroupListArrayAdapter = new ArrayAdapter(CreateCouponCampaignActivity.this,android.R.layout.simple_spinner_item,group);
+                            GroupListArrayAdapter = new ArrayAdapter(CreateCouponCampaignActivity.this, android.R.layout.simple_spinner_item, group);
                             GroupListArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             //Setting the ArrayAdapter data on the Spinner
                             mSpnCampaignGroup.setAdapter(GroupListArrayAdapter);
@@ -578,12 +579,13 @@ public class CreateCouponCampaignActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.activity_create_contact_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_edit:
-                for ( int i = 0; i < mContainer.getChildCount();  i++ ){
+                for (int i = 0; i < mContainer.getChildCount(); i++) {
                     View view = mContainer.getChildAt(i);
                     view.setEnabled(true); // Or whatever you want to do with the view.
                 }

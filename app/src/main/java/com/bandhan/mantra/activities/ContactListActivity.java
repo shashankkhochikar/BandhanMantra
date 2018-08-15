@@ -1,5 +1,7 @@
 package com.bandhan.mantra.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -28,6 +32,8 @@ import com.bandhan.mantra.model.GroupContactsByClientIdData;
 import com.bandhan.mantra.volley.GsonRequest;
 import com.bandhan.mantra.volley.VolleySingleton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -47,6 +53,11 @@ public class ContactListActivity extends BaseActivity {
     private List<Datum> checkedContacts;
     int current_page = 0;
     private List<Datum> data;
+    private Button btnRemoveFromGroup,btnAddToGroup;
+
+    private ArrayAdapter GroupListArrayAdapter;
+    private JSONArray GroupListjsonArray;
+    private JSONObject selectedGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,8 @@ public class ContactListActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         contactListListView = (ListView) findViewById(R.id.ConactListRecyclerView);
         linearLayoutContactItem = (LinearLayout)findViewById(R.id.linearLayoutContactItem);
+        btnRemoveFromGroup = (Button)findViewById(R.id.btnRemoveFromGroup);
+        btnAddToGroup = (Button)findViewById(R.id.btnAddToGroup);
         checkedContacts = new ArrayList<Datum>();
         data = new ArrayList<Datum>();
 
@@ -67,27 +80,28 @@ public class ContactListActivity extends BaseActivity {
         contactGroupItemData = (ContactGroupItemData) getIntent().getSerializableExtra("groupData");
         groupId = extras.getInt("groupId");
         getGroupContactsByClientID(clientId, contactGroupItemData.getId());
+        setListner();
 
         onButtonActionListener = new ContactListAdapter.OnButtonActionListener() {
             @Override
             public void onCheckBoxPressed(Datum datum, int position, boolean isChecked) {
                if(isChecked == false){
                     checkedContacts.remove(datum);
-                    /*if(checkedContacts.size()<0){
+                    if(checkedContacts.size()<0){
                         linearLayoutContactItem.setVisibility(View.GONE);
                     }else {
                         linearLayoutContactItem.setVisibility(View.VISIBLE);
-                    }*/
-                   showToast("size : "+checkedContacts.size()+"\npos : "+position+"\nisChecked : "+isChecked);
+                    }
+                   //showToast("size : "+checkedContacts.size()+"\npos : "+position+"\nisChecked : "+isChecked);
                 }
                 if(isChecked == true){
                     checkedContacts.add(datum);
-                    /*if(checkedContacts.size()<0){
+                    if(checkedContacts.size()<0){
                         linearLayoutContactItem.setVisibility(View.GONE);
                     }else {
                         linearLayoutContactItem.setVisibility(View.VISIBLE);
-                    }*/
-                    showToast("size : "+checkedContacts.size()+"\npos : "+position+"\nisChecked : "+isChecked);
+                    }
+                    //showToast("size : "+checkedContacts.size()+"\npos : "+position+"\nisChecked : "+isChecked);
                 }
 
             }
@@ -126,6 +140,98 @@ public class ContactListActivity extends BaseActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
+            }
+        });
+    }
+
+    private void setGroupList(int clientId) {
+        try {
+            showBusyProgress();
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("accessId", accessId);
+            params.put("ClientId", "" + clientId);
+            String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Group/GetGroupListByClientIdForCampaign", params);
+            Log.v(ContactListActivity.class.getName(), "Req : " + urlWithParams);
+
+            StringRequest GetGroupListByClientIdForCampaignRequest = new StringRequest(Request.Method.GET, urlWithParams, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String Response) {
+                    hideBusyProgress();
+                    Log.v(ContactListActivity.class.getName(), "onResponse :" + Response.toString());
+                    if (!Response.equals("")) {
+                        try {
+                            GroupListjsonArray = new JSONArray(Response);
+                            String[] group = new String[GroupListjsonArray.length()];
+                            for (int i = 0; i < GroupListjsonArray.length(); i++) {
+                                JSONObject jsonObject = (JSONObject) GroupListjsonArray.getJSONObject(i);
+                                group[i] = jsonObject.get("Name").toString();
+                            }
+
+                            GroupListArrayAdapter = new ArrayAdapter(ContactListActivity.this, android.R.layout.simple_spinner_item, group);
+                            GroupListArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                            //Setting the ArrayAdapter data on the Spinner
+                            //mSpnCampaignGroup.setAdapter(GroupListArrayAdapter);
+
+                            AlertDialog.Builder builderSingle = new AlertDialog.Builder(ContactListActivity.this);
+                            builderSingle.setIcon(R.drawable.app_logo);
+                            builderSingle.setTitle("Select Group :-");
+
+                            builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            builderSingle.setAdapter(GroupListArrayAdapter, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //String strName = GroupListArrayAdapter.getItem(which);
+                                    try {
+                                        selectedGroup = GroupListjsonArray.getJSONObject(which);//parent.getItemAtPosition(position).toString();
+                                        ContactsAddToGroup(selectedGroup);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        showToast(e.getMessage().toString());
+                                    }
+                                }
+                            });
+                            builderSingle.show();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        showToast("Invalid Response");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError e) {
+                    e.printStackTrace();
+                    hideBusyProgress();
+                    Log.v(ContactListActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
+                    //showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
+                }
+            });
+            VolleySingleton.getInstance().addToRequestQueue(GetGroupListByClientIdForCampaignRequest);
+        } catch (Exception e) {
+            hideBusyProgress();
+            Log.v(ContactListActivity.class.getName(), "Exception" + e.getMessage().toString());
+            showToast("Exception " + e.getMessage().toString());
+        }
+    }
+
+    private void ContactsAddToGroup(JSONObject selectedGroup) {
+
+    }
+
+    private void setListner(){
+        btnAddToGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setGroupList(clientId);
             }
         });
     }
@@ -265,11 +371,13 @@ public class ContactListActivity extends BaseActivity {
             showToast("Something went wrong. Please try again later.");
         }
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.add_menu, menu);
