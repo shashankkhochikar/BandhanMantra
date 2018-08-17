@@ -36,14 +36,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="remove" />
+                android:text="Remove From Group" />
 
             <Button
                 android:id="@+id/btnAddToGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="remove" />
+                android:text="Add To Group" />
         </LinearLayout>
     </LinearLayout>
 

@@ -84,26 +84,21 @@ public class ContactListActivity extends BaseActivity {
 
         onButtonActionListener = new ContactListAdapter.OnButtonActionListener() {
             @Override
-            public void onCheckBoxPressed(Datum datum, int position, boolean isChecked) {
-               if(isChecked == false){
-                    checkedContacts.remove(datum);
-                    if(checkedContacts.size()<0){
-                        linearLayoutContactItem.setVisibility(View.GONE);
-                    }else {
-                        linearLayoutContactItem.setVisibility(View.VISIBLE);
-                    }
-                   //showToast("size : "+checkedContacts.size()+"\npos : "+position+"\nisChecked : "+isChecked);
-                }
-                if(isChecked == true){
+            public void onCheckBoxPressed(Datum datum, int position, boolean isChecked)
+            {
+                if (isChecked) {
                     checkedContacts.add(datum);
-                    if(checkedContacts.size()<0){
-                        linearLayoutContactItem.setVisibility(View.GONE);
-                    }else {
+                    if(checkedContacts.size()>1){
                         linearLayoutContactItem.setVisibility(View.VISIBLE);
                     }
-                    //showToast("size : "+checkedContacts.size()+"\npos : "+position+"\nisChecked : "+isChecked);
+                    showToast(""+checkedContacts.size());
+                } else if (!isChecked) {
+                    checkedContacts.remove(datum);
+                    if(checkedContacts.size()<1){
+                        linearLayoutContactItem.setVisibility(View.GONE);
+                    }
+                    showToast(""+checkedContacts.size());
                 }
-
             }
 
             @Override
@@ -224,7 +219,122 @@ public class ContactListActivity extends BaseActivity {
     }
 
     private void ContactsAddToGroup(JSONObject selectedGroup) {
+        try {
+            showBusyProgress();
+            Map<String, String> param = new HashMap<String, String>();
+            param.put("GroupId",selectedGroup.get("Id").toString());
+            String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Group/ContactsAddToGroup",param);
 
+
+            List<String> tmp = new ArrayList<String>();
+            for(int i =0;i<checkedContacts.size();i++){
+                tmp.add(checkedContacts.get(i).getId().toString());
+            }
+            final String requestBody = tmp.toString();//params.toString();
+            Log.v(ContactListActivity.class.getName(),"Url : "+urlWithParams+"\nParams : "+requestBody);
+
+            StringRequest contactsAddToGroupRequest = new StringRequest(Request.Method.POST, urlWithParams, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String Response) {
+                    hideBusyProgress();
+                    Log.v(CreateContactActivity.class.getName(), "onResponse :" + Response.toString());
+                    if (Response.equals("")) {
+                        //getGroupListByClientId(clientId);
+                        showToast("Ok");
+                        finish();
+                    } else {
+                        showToast("Invalid Response");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError e) {
+                    e.printStackTrace();
+                    hideBusyProgress();
+                    Log.v(CreateContactActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
+                    showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            VolleySingleton.getInstance().addToRequestQueue(contactsAddToGroupRequest);
+        } catch (Exception e) {
+            hideBusyProgress();
+            Log.v(CreateContactActivity.class.getName(), "Exception" + e.getMessage().toString());
+            showToast("Exception " + e.getMessage().toString());
+        }
+    }
+
+    private void ContactsRemoveFromGroup(Integer selectedGroup) {
+        try {
+            showBusyProgress();
+            Map<String, String> param = new HashMap<String, String>();
+            param.put("GroupId", String.valueOf(selectedGroup));
+            String urlWithParams = createStringQueryBuilder(VolleySingleton.getWsBaseUrl() + "Group/ContactsRemoveFromGroup",param);
+
+            List<String> tmp = new ArrayList<String>();
+            for(int i =0;i<checkedContacts.size();i++){
+                tmp.add(checkedContacts.get(i).getId().toString());
+            }
+            final String requestBody = tmp.toString();//params.toString();
+            Log.v(ContactListActivity.class.getName(),"Url : "+urlWithParams+"\nParams : "+requestBody);
+
+            StringRequest contactsRemoveFromGroupRequest = new StringRequest(Request.Method.POST, urlWithParams, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String Response) {
+                    hideBusyProgress();
+                    Log.v(CreateContactActivity.class.getName(), "onResponse :" + Response.toString());
+                    if (Response.equals("")) {
+                        //getGroupListByClientId(clientId);
+                        showToast("Ok");
+                        finish();
+                    } else {
+                        showToast("Invalid Response");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError e) {
+                    e.printStackTrace();
+                    hideBusyProgress();
+                    Log.v(CreateContactActivity.class.getName(), "onErrorResponse" + VolleySingleton.getErrorMessage(e).toString());
+                    showToast("onErrorResponse " + VolleySingleton.getErrorMessage(e).toString());
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
+                    }
+                }
+            };
+            VolleySingleton.getInstance().addToRequestQueue(contactsRemoveFromGroupRequest);
+        } catch (Exception e) {
+            hideBusyProgress();
+            Log.v(CreateContactActivity.class.getName(), "Exception" + e.getMessage().toString());
+            showToast("Exception " + e.getMessage().toString());
+        }
     }
 
     private void setListner(){
@@ -232,6 +342,12 @@ public class ContactListActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 setGroupList(clientId);
+            }
+        });
+        btnRemoveFromGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContactsRemoveFromGroup(contactGroupItemData.getId());
             }
         });
     }
