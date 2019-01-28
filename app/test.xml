@@ -1,8 +1,5 @@
 <?xml version = "1.0" encoding = "utf-8"?>
-
-<!-- planes.xml - A document that lists ads for 
-                  used airplanes -->
-
+<!-- planes.xml - A document that lists ads for used airplanes -->
 <!DOCTYPE planes_for_sale SYSTEM "planes.dtd">
 <planes_for_sale>
    <ad>
